@@ -797,6 +797,65 @@
     sections.forEach((section) => observer.observe(section));
   }
 
+  function initMotionEffects() {
+    document.body.classList.add("is-loaded");
+
+    const revealTargets = [
+      ".category-card",
+      ".product-card",
+      ".process-copy",
+      ".image-panel",
+      ".split-band__inner > *",
+      ".image-feature__content",
+      ".trust-grid article",
+      ".info-card",
+      ".faq__item",
+      ".review-shell",
+      ".calculator",
+      ".link-panels article",
+      ".newsletter__inner > *",
+    ];
+
+    const elements = $$(revealTargets.join(","));
+    elements.forEach((element, index) => {
+      element.classList.add("reveal");
+      element.style.setProperty("--reveal-delay", `${Math.min((index % 6) * 45, 225)}ms`);
+    });
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          if (entry.target.animate) {
+            entry.target.animate(
+              [
+                { opacity: 0, transform: "translateY(22px)" },
+                { opacity: 1, transform: "translateY(0)" },
+              ],
+              {
+                duration: 560,
+                delay: Number.parseInt(entry.target.style.getPropertyValue("--reveal-delay"), 10) || 0,
+                easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+                fill: "both",
+              },
+            );
+          }
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+    );
+
+    state.revealObserver = observer;
+    elements.forEach((element) => observer.observe(element));
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initIcons();
     bindNavigation();
@@ -808,5 +867,6 @@
     bindNotices();
     bindScrollSpy();
     setLanguage(window.localStorage.getItem(LANGUAGE_STORAGE_KEY) || "es");
+    initMotionEffects();
   });
 })();
