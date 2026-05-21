@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="es-PE">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>P&amp;C Supplements | Scientific Lab Peru</title>
+    <title>P&amp;C Supplements | Laboratorio Cientifico Peru</title>
     <meta
       name="description"
-      content="P&C Supplements scientific lab storefront for Peru with blank product spaces and local sol pricing."
+      content="P&C Supplements es una tienda cientifica de laboratorio en Peru con espacios de producto en blanco y precios en soles."
     />
     <link
       rel="icon"
@@ -16,18 +16,18 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="top-strip" aria-label="Service highlights">
+    <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
       <div class="top-strip__inner">
-        <span>Peru-based scientific lab.</span>
-        <span>Prices in Peruvian soles.</span>
-        <span>Delivery across Peru.</span>
-        <span>Support from Lima.</span>
+        <span data-i18n="topPeru">Laboratorio cientifico en Peru.</span>
+        <span data-i18n="topSoles">Precios en soles peruanos.</span>
+        <span data-i18n="topDelivery">Entrega en todo el Peru.</span>
+        <span data-i18n="topSupport">Soporte desde Lima.</span>
       </div>
     </div>
 
     <header class="site-header">
       <div class="header-main">
-        <a class="brand" href="#home" aria-label="Home">
+        <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark">P&amp;C</span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -38,109 +38,109 @@
             id="searchInput"
             type="search"
             autocomplete="off"
-            placeholder="Search supplements..."
-            aria-label="Search supplements"
+            placeholder="Buscar suplementos..."
+            aria-label="Buscar suplementos"
+            data-i18n-placeholder="searchPlaceholder"
+            data-i18n-aria="searchAria"
           />
-          <button type="submit" aria-label="Submit search">
+          <button type="submit" aria-label="Enviar busqueda" data-i18n-aria="submitSearchAria">
             <i data-lucide="arrow-right" aria-hidden="true"></i>
           </button>
         </form>
 
-        <div class="header-actions" aria-label="Account and cart actions">
-          <div class="language-switch" role="group" aria-label="Language">
-            <button class="icon-text active" type="button" data-language="es-PE" data-label="PE">
-              <i data-lucide="map-pin" aria-hidden="true"></i>
-              <span>PE</span>
-            </button>
-            <button class="icon-text" type="button" data-language="en">
-              <i data-lucide="globe-2" aria-hidden="true"></i>
-              <span>EN</span>
-            </button>
+        <div class="header-actions" aria-label="Acciones de cuenta y carrito" data-i18n-aria="headerActionsAria">
+          <div class="language-switch">
+            <label class="sr-only" for="languageSelect" data-i18n="languageLabel">Idioma</label>
+            <i data-lucide="languages" aria-hidden="true"></i>
+            <select id="languageSelect" class="language-select" aria-label="Seleccionar idioma" data-i18n-aria="languageSelectAria">
+              <option value="es">Espanol</option>
+              <option value="en">English</option>
+            </select>
           </div>
-          <button class="icon-button" id="accountButton" type="button" aria-label="Account">
+          <button class="icon-button" id="accountButton" type="button" aria-label="Cuenta" data-i18n-aria="accountAria">
             <i data-lucide="user" aria-hidden="true"></i>
           </button>
-          <button class="icon-button cart-button" id="cartButton" type="button" aria-label="Cart">
+          <button class="icon-button cart-button" id="cartButton" type="button" aria-label="Carrito" data-i18n-aria="cartAria">
             <i data-lucide="shopping-cart" aria-hidden="true"></i>
             <span class="cart-count" id="cartCount">0</span>
           </button>
-          <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Open menu">
+          <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Abrir menu" data-i18n-aria="openMenuAria">
             <i data-lucide="menu" aria-hidden="true"></i>
           </button>
         </div>
       </div>
 
-      <nav class="site-nav" aria-label="Main navigation">
-        <a class="nav-link active" href="#home">Home</a>
-        <a class="nav-link" href="#products">All Supplements</a>
-        <a class="nav-link" href="#about">About Us</a>
-        <a class="nav-link" href="#test-results">Quality Certificates</a>
-        <a class="nav-link" href="#calculator">Lab Calculator</a>
-        <a class="nav-link" href="#forum">Community</a>
+      <nav class="site-nav" aria-label="Navegacion principal" data-i18n-aria="mainNavAria">
+        <a class="nav-link active" href="#home" data-i18n="navHome">Inicio</a>
+        <a class="nav-link" href="#products" data-i18n="navProducts">Todos los suplementos</a>
+        <a class="nav-link" href="#about" data-i18n="navAbout">Nosotros</a>
+        <a class="nav-link" href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
+        <a class="nav-link" href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
+        <a class="nav-link" href="#forum" data-i18n="navCommunity">Comunidad</a>
         <a class="nav-link" href="#b2b">B2B</a>
-        <a class="nav-link" href="#contact">Contact</a>
+        <a class="nav-link" href="#contact" data-i18n="navContact">Contacto</a>
       </nav>
     </header>
 
     <main id="home">
-      <section class="hero" aria-label="Primary">
+      <section class="hero" aria-label="Principal" data-i18n-aria="primaryAria">
         <div class="hero__media" aria-hidden="true"></div>
         <div class="container hero__content">
-          <p class="eyebrow">Lima, Peru · Scientific supplement lab</p>
+          <p class="eyebrow" data-i18n="heroEyebrow">Lima, Peru · Laboratorio cientifico de suplementos</p>
           <h1 class="hero-title hero-title--text">P&amp;C Supplements</h1>
-          <p>
-            A lab-forward catalog for Peru with scientific presentation,
-            certificate-ready product spaces, and local sol checkout.
+          <p data-i18n="heroCopy">
+            Un catalogo de enfoque cientifico para Peru, con presentacion de
+            laboratorio, espacios listos para certificados y pago en soles.
           </p>
           <div class="hero__actions">
             <button class="button button--accent" type="button" data-scroll-target="products">
-              Browse Supplements
+              <span data-i18n="heroBrowse">Ver suplementos</span>
             </button>
             <button class="button button--ghost-dark" type="button" data-scroll-target="test-results">
-              View Quality Certificates
+              <span data-i18n="heroCertificates">Ver certificados de calidad</span>
             </button>
           </div>
         </div>
       </section>
 
-      <section class="feature-strip" aria-label="Trust signals">
+      <section class="feature-strip" aria-label="Senales de confianza" data-i18n-aria="trustSignalsAria">
         <div class="container feature-strip__inner">
-          <span><i data-lucide="truck" aria-hidden="true"></i>Peru Delivery</span>
-          <span><i data-lucide="microscope" aria-hidden="true"></i>Lab Reviewed</span>
-          <span><i data-lucide="shield-check" aria-hidden="true"></i>Quality Records</span>
-          <span><i data-lucide="flask-conical" aria-hidden="true"></i>Scientific Support</span>
+          <span><i data-lucide="truck" aria-hidden="true"></i><span data-i18n="featureDelivery">Entrega en Peru</span></span>
+          <span><i data-lucide="microscope" aria-hidden="true"></i><span data-i18n="featureLab">Revision de laboratorio</span></span>
+          <span><i data-lucide="shield-check" aria-hidden="true"></i><span data-i18n="featureRecords">Registros de calidad</span></span>
+          <span><i data-lucide="flask-conical" aria-hidden="true"></i><span data-i18n="featureSupport">Soporte cientifico</span></span>
         </div>
       </section>
 
       <section class="category-section" aria-labelledby="categoryTitle">
         <div class="container">
           <div class="section-heading section-heading--center">
-            <h2 id="categoryTitle">Shop by Category</h2>
+            <h2 id="categoryTitle" data-i18n="categoryTitle">Comprar por categoria</h2>
           </div>
           <div class="category-grid" role="list">
             <button class="category-card active" type="button" data-category="all" role="listitem">
               <span class="category-card__icon"><i data-lucide="microscope" aria-hidden="true"></i></span>
-              <span>Microscopy</span>
+              <span data-i18n="catMicroscopy">Microscopia</span>
             </button>
             <button class="category-card" type="button" data-category="bioregulators" role="listitem">
               <span class="category-card__icon"><i data-lucide="activity" aria-hidden="true"></i></span>
-              <span>Analytes</span>
+              <span data-i18n="catAnalytes">Analitos</span>
             </button>
             <button class="category-card" type="button" data-category="glp" role="listitem">
               <span class="category-card__icon"><i data-lucide="flask-conical" aria-hidden="true"></i></span>
-              <span>Formulas</span>
+              <span data-i18n="catFormulas">Formulas</span>
             </button>
             <button class="category-card" type="button" data-category="sarms" role="listitem">
               <span class="category-card__icon"><i data-lucide="atom" aria-hidden="true"></i></span>
-              <span>Compounds</span>
+              <span data-i18n="catCompounds">Compuestos</span>
             </button>
             <button class="category-card" type="button" data-category="nootropics" role="listitem">
               <span class="category-card__icon"><i data-lucide="brain" aria-hidden="true"></i></span>
-              <span>Methods</span>
+              <span data-i18n="catMethods">Metodos</span>
             </button>
             <button class="category-card" type="button" data-category="supplies" role="listitem">
               <span class="category-card__icon"><i data-lucide="package-open" aria-hidden="true"></i></span>
-              <span>Lab Supplies</span>
+              <span data-i18n="catSupplies">Insumos de laboratorio</span>
             </button>
           </div>
         </div>
@@ -149,8 +149,8 @@
       <section class="product-section" id="products" aria-labelledby="productsTitle">
         <div class="container">
           <div class="section-heading">
-            <h2 id="productsTitle">Featured Supplements</h2>
-            <button class="text-link" type="button" data-view-all>View All <span aria-hidden="true">→</span></button>
+            <h2 id="productsTitle" data-i18n="productsTitle">Suplementos destacados</h2>
+            <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo</span> <span aria-hidden="true">→</span></button>
           </div>
 
           <p class="search-status" id="searchStatus" aria-live="polite"></p>
@@ -161,7 +161,7 @@
               <div class="product-card__body">
                 <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
                 <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="1">Add to Cart</button>
+                <button class="button button--dark add-cart" type="button" data-product-id="1" data-i18n="addCart">Agregar al carrito</button>
               </div>
             </article>
             <article class="product-card" data-product-card data-category="glp">
@@ -169,7 +169,7 @@
               <div class="product-card__body">
                 <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
                 <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="2">Add to Cart</button>
+                <button class="button button--dark add-cart" type="button" data-product-id="2" data-i18n="addCart">Agregar al carrito</button>
               </div>
             </article>
             <article class="product-card" data-product-card data-category="bioregulators">
@@ -177,7 +177,7 @@
               <div class="product-card__body">
                 <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
                 <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="3">Add to Cart</button>
+                <button class="button button--dark add-cart" type="button" data-product-id="3" data-i18n="addCart">Agregar al carrito</button>
               </div>
             </article>
             <article class="product-card" data-product-card data-category="supplies">
@@ -185,7 +185,7 @@
               <div class="product-card__body">
                 <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
                 <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="4">Add to Cart</button>
+                <button class="button button--dark add-cart" type="button" data-product-id="4" data-i18n="addCart">Agregar al carrito</button>
               </div>
             </article>
           </div>
@@ -195,24 +195,25 @@
       <section class="process-section" id="about" aria-labelledby="processTitle">
         <div class="container process-grid">
           <div class="process-copy">
-            <h2 id="processTitle">Built for Scientific Review</h2>
-            <p>
-              A scientific supplement layout with room for sourcing notes,
-              analytical records, method details, and quality documentation.
+            <h2 id="processTitle" data-i18n="processTitle">Construido para revision cientifica</h2>
+            <p data-i18n="processCopy">
+              Un layout cientifico para suplementos, con espacio para notas de
+              origen, registros analiticos, metodos y documentacion de calidad.
             </p>
             <ul class="check-list">
-              <li><i data-lucide="check" aria-hidden="true"></i>Peru-first pricing and delivery language</li>
-              <li><i data-lucide="check" aria-hidden="true"></i>Blank product slots ready for catalog photos</li>
-              <li><i data-lucide="check" aria-hidden="true"></i>Microscope and certificate placement for every batch</li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint1">Precios y entrega pensados para Peru</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint2">Espacios en blanco listos para fotos de catalogo</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint3">Espacio para microscopia y certificados por lote</span></li>
             </ul>
             <button class="button button--outline" type="button" data-scroll-target="quality">
-              Learn More About Us
+              <span data-i18n="learnMore">Conocer mas</span>
             </button>
           </div>
           <figure class="image-panel">
             <img
               src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1200&q=80"
-              alt="Scientist working with laboratory microscope"
+              alt="Cientifico trabajando con microscopio de laboratorio"
+              data-i18n-alt="labImageAlt"
             />
           </figure>
         </div>
@@ -221,20 +222,20 @@
       <section class="split-band" id="quality" aria-labelledby="qualityTitle">
         <div class="container split-band__inner">
           <div>
-            <h2 id="qualityTitle" class="blank-title" aria-label="Blank section title">
+            <h2 id="qualityTitle" class="blank-title" aria-label="Titulo de seccion en blanco" data-i18n-aria="blankTitleAria">
               <span></span>
               <span></span>
             </h2>
-            <p>
-              A short brand credibility block can sit here, with room for
-              final launch copy while keeping the page distinct.
+            <p data-i18n="qualityCopy">
+              Aqui puede ir un bloque breve de credibilidad de marca, con
+              espacio para el texto final de lanzamiento.
             </p>
-            <button class="text-link" type="button" data-scroll-target="about">More about us <span aria-hidden="true">→</span></button>
+            <button class="text-link" type="button" data-scroll-target="about"><span data-i18n="moreAbout">Mas sobre nosotros</span> <span aria-hidden="true">→</span></button>
           </div>
-          <div class="stats-row" aria-label="Quality statistics">
-            <span><strong>PE</strong> Peru location</span>
-            <span><strong>S/</strong> Local pricing</span>
-            <span><strong>24h</strong> Support queue</span>
+          <div class="stats-row" aria-label="Estadisticas de calidad" data-i18n-aria="statsAria">
+            <span><strong>PE</strong> <span data-i18n="statLocation">Ubicacion Peru</span></span>
+            <span><strong>S/</strong> <span data-i18n="statPricing">Precios locales</span></span>
+            <span><strong>24h</strong> <span data-i18n="statSupport">Cola de soporte</span></span>
           </div>
         </div>
       </section>
@@ -242,41 +243,41 @@
       <section class="image-feature" aria-labelledby="purityTitle">
         <div class="image-feature__image" aria-hidden="true"></div>
         <div class="image-feature__content">
-          <h2 id="purityTitle">Purple Label Analysis</h2>
-          <p>
-            Use this panel for a featured analytical method, certificate story,
-            or Peruvian lab note without copying the reference brand.
+          <h2 id="purityTitle" data-i18n="analysisTitle">Analisis Purple Label</h2>
+          <p data-i18n="analysisCopy">
+            Usa este panel para un metodo analitico destacado, una historia de
+            certificados o una nota de laboratorio peruana.
           </p>
-          <button class="button button--dark" type="button" data-scroll-target="products">Shop Now</button>
+          <button class="button button--dark" type="button" data-scroll-target="products"><span data-i18n="shopNow">Comprar ahora</span></button>
         </div>
       </section>
 
       <section class="trust-section" aria-labelledby="trustTitle">
         <div class="container">
           <div class="section-heading section-heading--center">
-            <h2 id="trustTitle">Why Customers Trust Us</h2>
-            <p>Compact trust cards for scientific supplement shopping in Peru.</p>
+            <h2 id="trustTitle" data-i18n="trustTitle">Por que los clientes confian en nosotros</h2>
+            <p data-i18n="trustCopy">Tarjetas de confianza para compra cientifica de suplementos en Peru.</p>
           </div>
           <div class="trust-grid">
             <article>
               <i data-lucide="badge-check" aria-hidden="true"></i>
-              <h3>Local Pricing</h3>
-              <p>Every product slot is set to S/ 100.00 for a clean launch grid.</p>
+              <h3 data-i18n="trustPricingTitle">Precios locales</h3>
+              <p data-i18n="trustPricingCopy">Cada espacio de producto esta en S/ 100.00 para una grilla limpia.</p>
             </article>
             <article>
               <i data-lucide="microscope" aria-hidden="true"></i>
-              <h3>Quality First</h3>
-              <p>Structured for analytical notes, certificates, and support context.</p>
+              <h3 data-i18n="trustQualityTitle">Calidad primero</h3>
+              <p data-i18n="trustQualityCopy">Estructurado para notas analiticas, certificados y soporte.</p>
             </article>
             <article>
               <i data-lucide="file-check-2" aria-hidden="true"></i>
-              <h3>Certificate Ready</h3>
-              <p>Dedicated quality-certificate placement is included.</p>
+              <h3 data-i18n="trustCertificateTitle">Listo para certificados</h3>
+              <p data-i18n="trustCertificateCopy">Incluye espacio dedicado para certificados de calidad.</p>
             </article>
             <article>
               <i data-lucide="message-circle" aria-hidden="true"></i>
-              <h3>Support</h3>
-              <p>Account and contact actions stay available across the storefront.</p>
+              <h3 data-i18n="trustSupportTitle">Soporte</h3>
+              <p data-i18n="trustSupportCopy">Cuenta y contacto permanecen disponibles en toda la tienda.</p>
             </article>
           </div>
         </div>
@@ -285,35 +286,35 @@
       <section class="info-section" id="test-results" aria-labelledby="qualityInfoTitle">
         <div class="container info-grid">
           <div class="info-card info-card--large">
-            <h2 id="qualityInfoTitle">Quality & Label Information</h2>
-            <p>
-              Use this area for analytical notes, certificates, import details,
-              local delivery conditions, and compliance copy for Peru.
+            <h2 id="qualityInfoTitle" data-i18n="qualityInfoTitle">Informacion de calidad y etiqueta</h2>
+            <p data-i18n="qualityInfoCopy">
+              Usa esta area para notas analiticas, certificados, detalles de
+              importacion, condiciones de entrega y cumplimiento en Peru.
             </p>
             <button class="button button--outline" type="button" data-open-results>
-              Quality Certificates
+              <span data-i18n="qualityCertificates">Certificados de calidad</span>
             </button>
           </div>
-          <div class="faq" aria-label="Frequently asked questions">
+          <div class="faq" aria-label="Preguntas frecuentes" data-i18n-aria="faqAria">
             <button class="faq__item" type="button" aria-expanded="false">
-              <span>Where is the store located?</span>
+              <span data-i18n="faqLocationQ">Donde esta ubicada la tienda?</span>
               <i data-lucide="chevron-down" aria-hidden="true"></i>
-              <small>P&amp;C Supplements is set up as a Peru-focused storefront.</small>
+              <small data-i18n="faqLocationA">P&amp;C Supplements esta configurada como tienda enfocada en Peru.</small>
             </button>
             <button class="faq__item" type="button" aria-expanded="false">
-              <span>What currency does checkout use?</span>
+              <span data-i18n="faqCurrencyQ">Que moneda usa el checkout?</span>
               <i data-lucide="chevron-down" aria-hidden="true"></i>
-              <small>All product spaces are priced at S/ 100.00 using PEN.</small>
+              <small data-i18n="faqCurrencyA">Todos los espacios de producto cuestan S/ 100.00 en PEN.</small>
             </button>
             <button class="faq__item" type="button" aria-expanded="false">
-              <span>Where do quality documents belong?</span>
+              <span data-i18n="faqDocsQ">Donde van los documentos de calidad?</span>
               <i data-lucide="chevron-down" aria-hidden="true"></i>
-              <small>Use the certificate section and product detail pages.</small>
+              <small data-i18n="faqDocsA">Usa la seccion de certificados y las paginas de detalle de producto.</small>
             </button>
             <button class="faq__item" type="button" aria-expanded="false">
-              <span>Can this layout support delivery in Peru?</span>
+              <span data-i18n="faqDeliveryQ">Este layout soporta entregas en Peru?</span>
               <i data-lucide="chevron-down" aria-hidden="true"></i>
-              <small>Yes. Header, footer, and checkout copy are framed around Peru.</small>
+              <small data-i18n="faqDeliveryA">Si. El header, footer y checkout estan pensados para Peru.</small>
             </button>
           </div>
         </div>
@@ -323,14 +324,14 @@
         <div class="container review-shell">
           <div class="section-heading">
             <div>
-              <h2 id="reviewsTitle">What Our Customers Say</h2>
-              <p>4.7/5 · 136+ reviews</p>
+              <h2 id="reviewsTitle" data-i18n="reviewsTitle">Lo que dicen nuestros clientes</h2>
+              <p data-i18n="reviewsRating">4.7/5 · 136+ resenas</p>
             </div>
             <div class="review-controls">
-              <button class="icon-button" type="button" id="reviewPrev" aria-label="Previous review">
+              <button class="icon-button" type="button" id="reviewPrev" aria-label="Resena anterior" data-i18n-aria="prevReviewAria">
                 <i data-lucide="chevron-left" aria-hidden="true"></i>
               </button>
-              <button class="icon-button" type="button" id="reviewNext" aria-label="Next review">
+              <button class="icon-button" type="button" id="reviewNext" aria-label="Siguiente resena" data-i18n-aria="nextReviewAria">
                 <i data-lucide="chevron-right" aria-hidden="true"></i>
               </button>
             </div>
@@ -343,40 +344,40 @@
       <section class="utility-section" id="calculator" aria-labelledby="calculatorTitle">
         <div class="container utility-grid">
           <div>
-            <h2 id="calculatorTitle">Lab Calculator</h2>
-            <p>Simple concentration calculation area for future lab workflows.</p>
+            <h2 id="calculatorTitle" data-i18n="calculatorTitle">Calculadora de laboratorio</h2>
+            <p data-i18n="calculatorCopy">Area simple para calculos de concentracion en flujos de laboratorio.</p>
           </div>
           <form class="calculator" id="calculatorForm">
             <label>
-              Amount
+              <span data-i18n="amountLabel">Cantidad</span>
               <input type="number" min="0" step="0.1" id="amountInput" placeholder="0" />
             </label>
             <label>
-              Volume
+              <span data-i18n="volumeLabel">Volumen</span>
               <input type="number" min="0" step="0.1" id="volumeInput" placeholder="0" />
             </label>
-            <button class="button button--dark" type="submit">Calculate</button>
-            <output id="calculatorOutput">Result will appear here.</output>
+            <button class="button button--dark" type="submit" data-i18n="calculateButton">Calcular</button>
+            <output id="calculatorOutput" data-i18n="calculatorOutputDefault">El resultado aparecera aqui.</output>
           </form>
         </div>
       </section>
 
-      <section class="link-panels" aria-label="Additional sections">
+      <section class="link-panels" aria-label="Secciones adicionales" data-i18n-aria="additionalSectionsAria">
         <div class="container link-panels__grid">
           <article id="forum">
-            <h2>Community</h2>
-            <p>Scientific notes, methods, and article links can be placed here.</p>
-            <button class="text-link" type="button" data-toast="Community action opened">Open community <span aria-hidden="true">→</span></button>
+            <h2 data-i18n="communityTitle">Comunidad</h2>
+            <p data-i18n="communityCopy">Aqui pueden ir notas cientificas, metodos y enlaces a articulos.</p>
+            <button class="text-link" type="button" data-toast-key="communityToast"><span data-i18n="openCommunity">Abrir comunidad</span> <span aria-hidden="true">→</span></button>
           </article>
           <article id="b2b">
             <h2>B2B</h2>
-            <p>Bulk purchasing and retail partner inquiry flows can live here.</p>
-            <button class="text-link" type="button" data-scroll-target="contact">Start inquiry <span aria-hidden="true">→</span></button>
+            <p data-i18n="b2bCopy">Aqui pueden ir compras por volumen y consultas de socios comerciales.</p>
+            <button class="text-link" type="button" data-scroll-target="contact"><span data-i18n="startInquiry">Iniciar consulta</span> <span aria-hidden="true">→</span></button>
           </article>
           <article id="contact">
-            <h2>Contact</h2>
-            <p>Use the contact action for account, delivery, and order support.</p>
-            <button class="text-link" type="button" data-open-contact>Contact <span aria-hidden="true">→</span></button>
+            <h2 data-i18n="contactTitle">Contacto</h2>
+            <p data-i18n="contactCopy">Usa contacto para cuenta, entregas y soporte de pedidos.</p>
+            <button class="text-link" type="button" data-open-contact><span data-i18n="contactButton">Contacto</span> <span aria-hidden="true">→</span></button>
           </article>
         </div>
       </section>
@@ -384,13 +385,13 @@
       <section class="newsletter" aria-labelledby="newsletterTitle">
         <div class="container newsletter__inner">
           <div>
-            <h2 id="newsletterTitle">Unlock P&amp;C Drops for Peru</h2>
-            <p>Sign up now and receive launch, delivery, and promotion updates.</p>
+            <h2 id="newsletterTitle" data-i18n="newsletterTitle">Accede a lanzamientos de P&amp;C en Peru</h2>
+            <p data-i18n="newsletterCopy">Registrate para recibir novedades de lanzamiento, entrega y promociones.</p>
           </div>
           <form class="newsletter-form" id="newsletterForm">
-            <label class="sr-only" for="newsletterEmail">Email</label>
-            <input id="newsletterEmail" type="email" placeholder="Email address" required />
-            <button class="button button--accent" type="submit">Sign Up</button>
+            <label class="sr-only" for="newsletterEmail" data-i18n="emailLabel">Correo</label>
+            <input id="newsletterEmail" type="email" placeholder="Correo electronico" required data-i18n-placeholder="emailPlaceholder" />
+            <button class="button button--accent" type="submit" data-i18n="signUp">Registrarse</button>
           </form>
         </div>
       </section>
@@ -399,107 +400,107 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <a class="brand brand--footer" href="#home" aria-label="Home">
+          <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark">P&amp;C</span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
-          <p>
-            A premium Peru-focused scientific supplement storefront with blank
-            catalog spaces, local sol pricing, and support touchpoints.
+          <p data-i18n="footerCopy">
+            Una tienda cientifica premium enfocada en Peru, con espacios de
+            catalogo en blanco, precios en soles y puntos de soporte.
           </p>
         </div>
-        <nav aria-label="Footer company links">
-          <h3>Company</h3>
-          <a href="#about">About Us</a>
+        <nav aria-label="Enlaces de compania" data-i18n-aria="footerCompanyAria">
+          <h3 data-i18n="companyTitle">Compania</h3>
+          <a href="#about" data-i18n="navAbout">Nosotros</a>
           <a href="#b2b">B2B</a>
-          <a href="#test-results">Quality Certificates</a>
-          <a href="#contact">Contact</a>
+          <a href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
+          <a href="#contact" data-i18n="navContact">Contacto</a>
         </nav>
-        <nav aria-label="Footer policy links">
-          <h3>Policies</h3>
-          <button type="button" data-toast="Privacy panel opened">Privacy Policy</button>
-          <button type="button" data-toast="Terms panel opened">Terms & Conditions</button>
-          <button type="button" data-toast="Returns panel opened">Returns & Refunds</button>
-          <button type="button" data-toast="Disclaimer panel opened">Disclaimer</button>
+        <nav aria-label="Enlaces de politicas" data-i18n-aria="footerPoliciesAria">
+          <h3 data-i18n="policiesTitle">Politicas</h3>
+          <button type="button" data-toast-key="privacyToast" data-i18n="privacyPolicy">Politica de privacidad</button>
+          <button type="button" data-toast-key="termsToast" data-i18n="termsConditions">Terminos y condiciones</button>
+          <button type="button" data-toast-key="returnsToast" data-i18n="returnsRefunds">Cambios y devoluciones</button>
+          <button type="button" data-toast-key="disclaimerToast" data-i18n="disclaimer">Descargo de responsabilidad</button>
         </nav>
         <div>
-          <h3>Contact</h3>
-          <p>Lima support line and customer service space.</p>
-          <button class="button button--outline-light" type="button" data-open-contact>Contact</button>
+          <h3 data-i18n="contactTitle">Contacto</h3>
+          <p data-i18n="footerContactCopy">Espacio para soporte desde Lima y atencion al cliente.</p>
+          <button class="button button--outline-light" type="button" data-open-contact data-i18n="contactButton">Contacto</button>
         </div>
       </div>
       <div class="container footer-bottom">
         <span>© 2026 P&amp;C Supplements · Peru</span>
-        <button type="button" data-toast="Cookie preferences opened">Privacy Policy</button>
+        <button type="button" data-toast-key="cookiePrefsToast" data-i18n="privacyPolicy">Politica de privacidad</button>
       </div>
     </footer>
 
-    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true" aria-label="Mobile menu">
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu movil" data-i18n-aria="mobileMenuAria">
       <div class="drawer-panel">
         <div class="drawer-header">
-          <span>Menu</span>
-          <button class="icon-button" type="button" data-close-menu aria-label="Close menu">
+          <span data-i18n="menuTitle">Menu</span>
+          <button class="icon-button" type="button" data-close-menu aria-label="Cerrar menu" data-i18n-aria="closeMenuAria">
             <i data-lucide="x" aria-hidden="true"></i>
           </button>
         </div>
         <nav>
-          <a href="#home">Home</a>
-          <a href="#products">All Supplements</a>
-          <a href="#about">About Us</a>
-          <a href="#test-results">Quality Certificates</a>
-          <a href="#calculator">Lab Calculator</a>
-          <a href="#forum">Community</a>
+          <a href="#home" data-i18n="navHome">Inicio</a>
+          <a href="#products" data-i18n="navProducts">Todos los suplementos</a>
+          <a href="#about" data-i18n="navAbout">Nosotros</a>
+          <a href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
+          <a href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
+          <a href="#forum" data-i18n="navCommunity">Comunidad</a>
           <a href="#b2b">B2B</a>
-          <a href="#contact">Contact</a>
+          <a href="#contact" data-i18n="navContact">Contacto</a>
         </nav>
       </div>
     </aside>
 
-    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Cart">
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Carrito" data-i18n-aria="cartAria">
       <div class="drawer-panel drawer-panel--right">
         <div class="drawer-header">
-          <span>Cart</span>
-          <button class="icon-button" type="button" data-close-cart aria-label="Close cart">
+          <span data-i18n="cartTitle">Carrito</span>
+          <button class="icon-button" type="button" data-close-cart aria-label="Cerrar carrito" data-i18n-aria="closeCartAria">
             <i data-lucide="x" aria-hidden="true"></i>
           </button>
         </div>
         <div class="cart-lines" id="cartLines">
-          <p>Your cart is empty.</p>
+          <p data-i18n="cartEmpty">Tu carrito esta vacio.</p>
         </div>
         <div class="cart-total" id="cartTotal">Total: S/ 0.00</div>
-        <button class="button button--dark checkout-button" type="button" id="checkoutButton">Checkout with Paddle</button>
+        <button class="button button--dark checkout-button" type="button" id="checkoutButton" data-i18n="checkoutButton">Pagar con Paddle</button>
       </div>
     </aside>
 
     <dialog class="modal" id="accountModal" aria-labelledby="accountTitle">
       <form method="dialog">
-        <button class="icon-button modal-close" value="cancel" aria-label="Close account">
+        <button class="icon-button modal-close" value="cancel" aria-label="Cerrar cuenta" data-i18n-aria="closeAccountAria">
           <i data-lucide="x" aria-hidden="true"></i>
         </button>
-        <h2 id="accountTitle">Account</h2>
+        <h2 id="accountTitle" data-i18n="accountTitle">Cuenta</h2>
         <label>
-          Email
-          <input type="email" id="accountEmail" placeholder="Email address" />
+          <span data-i18n="emailLabel">Correo</span>
+          <input type="email" id="accountEmail" placeholder="Correo electronico" data-i18n-placeholder="emailPlaceholder" />
         </label>
-        <button class="button button--dark" value="signin">Sign In</button>
+        <button class="button button--dark" value="signin" data-i18n="signIn">Iniciar sesion</button>
       </form>
     </dialog>
 
     <dialog class="modal" id="contactModal" aria-labelledby="contactTitle">
       <form method="dialog">
-        <button class="icon-button modal-close" value="cancel" aria-label="Close contact">
+        <button class="icon-button modal-close" value="cancel" aria-label="Cerrar contacto" data-i18n-aria="closeContactAria">
           <i data-lucide="x" aria-hidden="true"></i>
         </button>
-        <h2 id="contactTitle">Contact</h2>
+        <h2 id="contactTitle" data-i18n="contactTitle">Contacto</h2>
         <label>
-          Email
-          <input type="email" placeholder="Email address" />
+          <span data-i18n="emailLabel">Correo</span>
+          <input type="email" placeholder="Correo electronico" data-i18n-placeholder="emailPlaceholder" />
         </label>
         <label>
-          Message
-          <textarea rows="4" placeholder="Message"></textarea>
+          <span data-i18n="messageLabel">Mensaje</span>
+          <textarea rows="4" placeholder="Mensaje" data-i18n-placeholder="messagePlaceholder"></textarea>
         </label>
-        <button class="button button--dark" value="send">Send</button>
+        <button class="button button--dark" value="send" data-i18n="sendButton">Enviar</button>
       </form>
     </dialog>
 
@@ -508,36 +509,36 @@
         <div class="notice-card__header">
           <i data-lucide="triangle-alert" aria-hidden="true"></i>
           <div>
-            <h2 id="noticeTitle">Important Notice — Supplement Store</h2>
-            <p>Please read before entering this website.</p>
+            <h2 id="noticeTitle" data-i18n="noticeTitle">Aviso importante — Tienda de suplementos</h2>
+            <p data-i18n="noticeSub">Lee antes de entrar a este sitio.</p>
           </div>
         </div>
         <div class="notice-card__body">
-          <p>
-            This storefront is a scientific supplement layout and checkout
-            integration for Peru. Final labels, analytical claims, ingredients,
-            and purchasing rules should be reviewed before launch.
+          <p data-i18n="noticeCopy">
+            Esta tienda es un layout cientifico de suplementos e integracion de
+            pago para Peru. Las etiquetas, afirmaciones analiticas, ingredientes
+            y reglas de compra finales deben revisarse antes del lanzamiento.
           </p>
           <ul>
-            <li>You are at least 18 years of age.</li>
-            <li>You will review product labels before purchasing.</li>
-            <li>You accept responsibility for local compliance and usage decisions.</li>
+            <li data-i18n="noticePoint1">Tienes al menos 18 anos.</li>
+            <li data-i18n="noticePoint2">Revisaras las etiquetas antes de comprar.</li>
+            <li data-i18n="noticePoint3">Aceptas responsabilidad por cumplimiento local y decisiones de uso.</li>
           </ul>
         </div>
-        <button class="button button--dark" type="button" id="acceptResearch">I have read the terms and I agree</button>
-        <button class="notice-card__leave" type="button" id="leaveSite">If you do not agree, please leave this website.</button>
+        <button class="button button--dark" type="button" id="acceptResearch" data-i18n="acceptTerms">He leido los terminos y acepto</button>
+        <button class="notice-card__leave" type="button" id="leaveSite" data-i18n="leaveSite">Si no aceptas, sal de este sitio.</button>
       </div>
     </dialog>
 
     <div class="cookie-banner" id="cookieBanner" role="region" aria-label="Cookies">
       <div>
-        <strong>Cookies & privacy</strong>
-        <p>
-          Necessary cookies keep the site running. Optional preferences can be
-          configured later.
+        <strong data-i18n="cookiesTitle">Cookies y privacidad</strong>
+        <p data-i18n="cookiesCopy">
+          Las cookies necesarias mantienen el sitio funcionando. Las preferencias
+          opcionales se pueden configurar despues.
         </p>
       </div>
-      <button class="button button--accent" type="button" id="acceptCookies">Accept & continue</button>
+      <button class="button button--accent" type="button" id="acceptCookies" data-i18n="acceptCookies">Aceptar y continuar</button>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

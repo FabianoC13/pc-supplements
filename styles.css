@@ -177,9 +177,13 @@ img {
 }
 
 .language-switch {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .icon-button,
@@ -210,6 +214,22 @@ img {
 .icon-text.active {
   color: var(--ink);
   background: var(--surface);
+}
+
+.language-switch svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-dark);
+}
+
+.language-select {
+  min-width: 104px;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-size: 0.86rem;
+  font-weight: 800;
 }
 
 .cart-button {
@@ -1205,10 +1225,6 @@ img {
 
   .menu-button {
     display: inline-grid;
-  }
-
-  .language-switch {
-    display: none;
   }
 
   .category-grid,
