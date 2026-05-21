@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P&amp;C Supplements | Scientific Lab Peru</title>
+    <meta
+      name="description"
+      content="P&C Supplements scientific lab storefront for Peru with blank product spaces and local sol pricing."
+    />
+    <link
+      rel="icon"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="%23170f29"/><text x="32" y="40" font-family="Arial" font-size="22" font-weight="700" text-anchor="middle" fill="%23a855f7">P%26C</text></svg>'
+    />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="top-strip" aria-label="Service highlights">
+      <div class="top-strip__inner">
+        <span>Peru-based scientific lab.</span>
+        <span>Prices in Peruvian soles.</span>
+        <span>Delivery across Peru.</span>
+        <span>Support from Lima.</span>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="header-main">
+        <a class="brand" href="#home" aria-label="Home">
+          <span class="brand__mark">P&amp;C</span>
+          <span class="brand__text">P&amp;C Supplements</span>
+        </a>
+
+        <form class="search" id="searchForm" role="search">
+          <i data-lucide="search" aria-hidden="true"></i>
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Search supplements..."
+            aria-label="Search supplements"
+          />
+          <button type="submit" aria-label="Submit search">
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div class="header-actions" aria-label="Account and cart actions">
+          <div class="language-switch" role="group" aria-label="Language">
+            <button class="icon-text active" type="button" data-language="es-PE" data-label="PE">
+              <i data-lucide="map-pin" aria-hidden="true"></i>
+              <span>PE</span>
+            </button>
+            <button class="icon-text" type="button" data-language="en">
+              <i data-lucide="globe-2" aria-hidden="true"></i>
+              <span>EN</span>
+            </button>
+          </div>
+          <button class="icon-button" id="accountButton" type="button" aria-label="Account">
+            <i data-lucide="user" aria-hidden="true"></i>
+          </button>
+          <button class="icon-button cart-button" id="cartButton" type="button" aria-label="Cart">
+            <i data-lucide="shopping-cart" aria-hidden="true"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Open menu">
+            <i data-lucide="menu" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#home">Home</a>
+        <a class="nav-link" href="#products">All Supplements</a>
+        <a class="nav-link" href="#about">About Us</a>
+        <a class="nav-link" href="#test-results">Quality Certificates</a>
+        <a class="nav-link" href="#calculator">Lab Calculator</a>
+        <a class="nav-link" href="#forum">Community</a>
+        <a class="nav-link" href="#b2b">B2B</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-label="Primary">
+        <div class="hero__media" aria-hidden="true"></div>
+        <div class="container hero__content">
+          <p class="eyebrow">Lima, Peru · Scientific supplement lab</p>
+          <h1 class="hero-title hero-title--text">P&amp;C Supplements</h1>
+          <p>
+            A lab-forward catalog for Peru with scientific presentation,
+            certificate-ready product spaces, and local sol checkout.
+          </p>
+          <div class="hero__actions">
+            <button class="button button--accent" type="button" data-scroll-target="products">
+              Browse Supplements
+            </button>
+            <button class="button button--ghost-dark" type="button" data-scroll-target="test-results">
+              View Quality Certificates
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="feature-strip" aria-label="Trust signals">
+        <div class="container feature-strip__inner">
+          <span><i data-lucide="truck" aria-hidden="true"></i>Peru Delivery</span>
+          <span><i data-lucide="microscope" aria-hidden="true"></i>Lab Reviewed</span>
+          <span><i data-lucide="shield-check" aria-hidden="true"></i>Quality Records</span>
+          <span><i data-lucide="flask-conical" aria-hidden="true"></i>Scientific Support</span>
+        </div>
+      </section>
+
+      <section class="category-section" aria-labelledby="categoryTitle">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <h2 id="categoryTitle">Shop by Category</h2>
+          </div>
+          <div class="category-grid" role="list">
+            <button class="category-card active" type="button" data-category="all" role="listitem">
+              <span class="category-card__icon"><i data-lucide="microscope" aria-hidden="true"></i></span>
+              <span>Microscopy</span>
+            </button>
+            <button class="category-card" type="button" data-category="bioregulators" role="listitem">
+              <span class="category-card__icon"><i data-lucide="activity" aria-hidden="true"></i></span>
+              <span>Analytes</span>
+            </button>
+            <button class="category-card" type="button" data-category="glp" role="listitem">
+              <span class="category-card__icon"><i data-lucide="flask-conical" aria-hidden="true"></i></span>
+              <span>Formulas</span>
+            </button>
+            <button class="category-card" type="button" data-category="sarms" role="listitem">
+              <span class="category-card__icon"><i data-lucide="atom" aria-hidden="true"></i></span>
+              <span>Compounds</span>
+            </button>
+            <button class="category-card" type="button" data-category="nootropics" role="listitem">
+              <span class="category-card__icon"><i data-lucide="brain" aria-hidden="true"></i></span>
+              <span>Methods</span>
+            </button>
+            <button class="category-card" type="button" data-category="supplies" role="listitem">
+              <span class="category-card__icon"><i data-lucide="package-open" aria-hidden="true"></i></span>
+              <span>Lab Supplies</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-section" id="products" aria-labelledby="productsTitle">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="productsTitle">Featured Supplements</h2>
+            <button class="text-link" type="button" data-view-all>View All <span aria-hidden="true">→</span></button>
+          </div>
+
+          <p class="search-status" id="searchStatus" aria-live="polite"></p>
+
+          <div class="product-grid" id="productGrid" aria-label="Product grid">
+            <article class="product-card" data-product-card data-category="all">
+              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
+              <div class="product-card__body">
+                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
+                <span class="product-price">S/ 100.00</span>
+                <button class="button button--dark add-cart" type="button" data-product-id="1">Add to Cart</button>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-category="glp">
+              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
+              <div class="product-card__body">
+                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
+                <span class="product-price">S/ 100.00</span>
+                <button class="button button--dark add-cart" type="button" data-product-id="2">Add to Cart</button>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-category="bioregulators">
+              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
+              <div class="product-card__body">
+                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
+                <span class="product-price">S/ 100.00</span>
+                <button class="button button--dark add-cart" type="button" data-product-id="3">Add to Cart</button>
+              </div>
+            </article>
+            <article class="product-card" data-product-card data-category="supplies">
+              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
+              <div class="product-card__body">
+                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
+                <span class="product-price">S/ 100.00</span>
+                <button class="button button--dark add-cart" type="button" data-product-id="4">Add to Cart</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="process-section" id="about" aria-labelledby="processTitle">
+        <div class="container process-grid">
+          <div class="process-copy">
+            <h2 id="processTitle">Built for Scientific Review</h2>
+            <p>
+              A scientific supplement layout with room for sourcing notes,
+              analytical records, method details, and quality documentation.
+            </p>
+            <ul class="check-list">
+              <li><i data-lucide="check" aria-hidden="true"></i>Peru-first pricing and delivery language</li>
+              <li><i data-lucide="check" aria-hidden="true"></i>Blank product slots ready for catalog photos</li>
+              <li><i data-lucide="check" aria-hidden="true"></i>Microscope and certificate placement for every batch</li>
+            </ul>
+            <button class="button button--outline" type="button" data-scroll-target="quality">
+              Learn More About Us
+            </button>
+          </div>
+          <figure class="image-panel">
+            <img
+              src="https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1200&q=80"
+              alt="Scientist working with laboratory microscope"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="split-band" id="quality" aria-labelledby="qualityTitle">
+        <div class="container split-band__inner">
+          <div>
+            <h2 id="qualityTitle" class="blank-title" aria-label="Blank section title">
+              <span></span>
+              <span></span>
+            </h2>
+            <p>
+              A short brand credibility block can sit here, with room for
+              final launch copy while keeping the page distinct.
+            </p>
+            <button class="text-link" type="button" data-scroll-target="about">More about us <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="stats-row" aria-label="Quality statistics">
+            <span><strong>PE</strong> Peru location</span>
+            <span><strong>S/</strong> Local pricing</span>
+            <span><strong>24h</strong> Support queue</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="image-feature" aria-labelledby="purityTitle">
+        <div class="image-feature__image" aria-hidden="true"></div>
+        <div class="image-feature__content">
+          <h2 id="purityTitle">Purple Label Analysis</h2>
+          <p>
+            Use this panel for a featured analytical method, certificate story,
+            or Peruvian lab note without copying the reference brand.
+          </p>
+          <button class="button button--dark" type="button" data-scroll-target="products">Shop Now</button>
+        </div>
+      </section>
+
+      <section class="trust-section" aria-labelledby="trustTitle">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <h2 id="trustTitle">Why Customers Trust Us</h2>
+            <p>Compact trust cards for scientific supplement shopping in Peru.</p>
+          </div>
+          <div class="trust-grid">
+            <article>
+              <i data-lucide="badge-check" aria-hidden="true"></i>
+              <h3>Local Pricing</h3>
+              <p>Every product slot is set to S/ 100.00 for a clean launch grid.</p>
+            </article>
+            <article>
+              <i data-lucide="microscope" aria-hidden="true"></i>
+              <h3>Quality First</h3>
+              <p>Structured for analytical notes, certificates, and support context.</p>
+            </article>
+            <article>
+              <i data-lucide="file-check-2" aria-hidden="true"></i>
+              <h3>Certificate Ready</h3>
+              <p>Dedicated quality-certificate placement is included.</p>
+            </article>
+            <article>
+              <i data-lucide="message-circle" aria-hidden="true"></i>
+              <h3>Support</h3>
+              <p>Account and contact actions stay available across the storefront.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section" id="test-results" aria-labelledby="qualityInfoTitle">
+        <div class="container info-grid">
+          <div class="info-card info-card--large">
+            <h2 id="qualityInfoTitle">Quality & Label Information</h2>
+            <p>
+              Use this area for analytical notes, certificates, import details,
+              local delivery conditions, and compliance copy for Peru.
+            </p>
+            <button class="button button--outline" type="button" data-open-results>
+              Quality Certificates
+            </button>
+          </div>
+          <div class="faq" aria-label="Frequently asked questions">
+            <button class="faq__item" type="button" aria-expanded="false">
+              <span>Where is the store located?</span>
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+              <small>P&amp;C Supplements is set up as a Peru-focused storefront.</small>
+            </button>
+            <button class="faq__item" type="button" aria-expanded="false">
+              <span>What currency does checkout use?</span>
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+              <small>All product spaces are priced at S/ 100.00 using PEN.</small>
+            </button>
+            <button class="faq__item" type="button" aria-expanded="false">
+              <span>Where do quality documents belong?</span>
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+              <small>Use the certificate section and product detail pages.</small>
+            </button>
+            <button class="faq__item" type="button" aria-expanded="false">
+              <span>Can this layout support delivery in Peru?</span>
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+              <small>Yes. Header, footer, and checkout copy are framed around Peru.</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="reviews-section" aria-labelledby="reviewsTitle">
+        <div class="container review-shell">
+          <div class="section-heading">
+            <div>
+              <h2 id="reviewsTitle">What Our Customers Say</h2>
+              <p>4.7/5 · 136+ reviews</p>
+            </div>
+            <div class="review-controls">
+              <button class="icon-button" type="button" id="reviewPrev" aria-label="Previous review">
+                <i data-lucide="chevron-left" aria-hidden="true"></i>
+              </button>
+              <button class="icon-button" type="button" id="reviewNext" aria-label="Next review">
+                <i data-lucide="chevron-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <article class="review-card" id="reviewCard" aria-live="polite"></article>
+          <div class="review-index" id="reviewIndex"></div>
+        </div>
+      </section>
+
+      <section class="utility-section" id="calculator" aria-labelledby="calculatorTitle">
+        <div class="container utility-grid">
+          <div>
+            <h2 id="calculatorTitle">Lab Calculator</h2>
+            <p>Simple concentration calculation area for future lab workflows.</p>
+          </div>
+          <form class="calculator" id="calculatorForm">
+            <label>
+              Amount
+              <input type="number" min="0" step="0.1" id="amountInput" placeholder="0" />
+            </label>
+            <label>
+              Volume
+              <input type="number" min="0" step="0.1" id="volumeInput" placeholder="0" />
+            </label>
+            <button class="button button--dark" type="submit">Calculate</button>
+            <output id="calculatorOutput">Result will appear here.</output>
+          </form>
+        </div>
+      </section>
+
+      <section class="link-panels" aria-label="Additional sections">
+        <div class="container link-panels__grid">
+          <article id="forum">
+            <h2>Community</h2>
+            <p>Scientific notes, methods, and article links can be placed here.</p>
+            <button class="text-link" type="button" data-toast="Community action opened">Open community <span aria-hidden="true">→</span></button>
+          </article>
+          <article id="b2b">
+            <h2>B2B</h2>
+            <p>Bulk purchasing and retail partner inquiry flows can live here.</p>
+            <button class="text-link" type="button" data-scroll-target="contact">Start inquiry <span aria-hidden="true">→</span></button>
+          </article>
+          <article id="contact">
+            <h2>Contact</h2>
+            <p>Use the contact action for account, delivery, and order support.</p>
+            <button class="text-link" type="button" data-open-contact>Contact <span aria-hidden="true">→</span></button>
+          </article>
+        </div>
+      </section>
+
+      <section class="newsletter" aria-labelledby="newsletterTitle">
+        <div class="container newsletter__inner">
+          <div>
+            <h2 id="newsletterTitle">Unlock P&amp;C Drops for Peru</h2>
+            <p>Sign up now and receive launch, delivery, and promotion updates.</p>
+          </div>
+          <form class="newsletter-form" id="newsletterForm">
+            <label class="sr-only" for="newsletterEmail">Email</label>
+            <input id="newsletterEmail" type="email" placeholder="Email address" required />
+            <button class="button button--accent" type="submit">Sign Up</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand brand--footer" href="#home" aria-label="Home">
+            <span class="brand__mark">P&amp;C</span>
+            <span class="brand__text">P&amp;C Supplements</span>
+          </a>
+          <p>
+            A premium Peru-focused scientific supplement storefront with blank
+            catalog spaces, local sol pricing, and support touchpoints.
+          </p>
+        </div>
+        <nav aria-label="Footer company links">
+          <h3>Company</h3>
+          <a href="#about">About Us</a>
+          <a href="#b2b">B2B</a>
+          <a href="#test-results">Quality Certificates</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <nav aria-label="Footer policy links">
+          <h3>Policies</h3>
+          <button type="button" data-toast="Privacy panel opened">Privacy Policy</button>
+          <button type="button" data-toast="Terms panel opened">Terms & Conditions</button>
+          <button type="button" data-toast="Returns panel opened">Returns & Refunds</button>
+          <button type="button" data-toast="Disclaimer panel opened">Disclaimer</button>
+        </nav>
+        <div>
+          <h3>Contact</h3>
+          <p>Lima support line and customer service space.</p>
+          <button class="button button--outline-light" type="button" data-open-contact>Contact</button>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 P&amp;C Supplements · Peru</span>
+        <button type="button" data-toast="Cookie preferences opened">Privacy Policy</button>
+      </div>
+    </footer>
+
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true" aria-label="Mobile menu">
+      <div class="drawer-panel">
+        <div class="drawer-header">
+          <span>Menu</span>
+          <button class="icon-button" type="button" data-close-menu aria-label="Close menu">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <nav>
+          <a href="#home">Home</a>
+          <a href="#products">All Supplements</a>
+          <a href="#about">About Us</a>
+          <a href="#test-results">Quality Certificates</a>
+          <a href="#calculator">Lab Calculator</a>
+          <a href="#forum">Community</a>
+          <a href="#b2b">B2B</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </aside>
+
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Cart">
+      <div class="drawer-panel drawer-panel--right">
+        <div class="drawer-header">
+          <span>Cart</span>
+          <button class="icon-button" type="button" data-close-cart aria-label="Close cart">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="cart-lines" id="cartLines">
+          <p>Your cart is empty.</p>
+        </div>
+        <div class="cart-total" id="cartTotal">Total: S/ 0.00</div>
+        <button class="button button--dark checkout-button" type="button" id="checkoutButton">Checkout with Paddle</button>
+      </div>
+    </aside>
+
+    <dialog class="modal" id="accountModal" aria-labelledby="accountTitle">
+      <form method="dialog">
+        <button class="icon-button modal-close" value="cancel" aria-label="Close account">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <h2 id="accountTitle">Account</h2>
+        <label>
+          Email
+          <input type="email" id="accountEmail" placeholder="Email address" />
+        </label>
+        <button class="button button--dark" value="signin">Sign In</button>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="contactModal" aria-labelledby="contactTitle">
+      <form method="dialog">
+        <button class="icon-button modal-close" value="cancel" aria-label="Close contact">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <h2 id="contactTitle">Contact</h2>
+        <label>
+          Email
+          <input type="email" placeholder="Email address" />
+        </label>
+        <label>
+          Message
+          <textarea rows="4" placeholder="Message"></textarea>
+        </label>
+        <button class="button button--dark" value="send">Send</button>
+      </form>
+    </dialog>
+
+    <dialog class="notice-modal" id="researchNotice" aria-labelledby="noticeTitle">
+      <div class="notice-card">
+        <div class="notice-card__header">
+          <i data-lucide="triangle-alert" aria-hidden="true"></i>
+          <div>
+            <h2 id="noticeTitle">Important Notice — Supplement Store</h2>
+            <p>Please read before entering this website.</p>
+          </div>
+        </div>
+        <div class="notice-card__body">
+          <p>
+            This storefront is a scientific supplement layout and checkout
+            integration for Peru. Final labels, analytical claims, ingredients,
+            and purchasing rules should be reviewed before launch.
+          </p>
+          <ul>
+            <li>You are at least 18 years of age.</li>
+            <li>You will review product labels before purchasing.</li>
+            <li>You accept responsibility for local compliance and usage decisions.</li>
+          </ul>
+        </div>
+        <button class="button button--dark" type="button" id="acceptResearch">I have read the terms and I agree</button>
+        <button class="notice-card__leave" type="button" id="leaveSite">If you do not agree, please leave this website.</button>
+      </div>
+    </dialog>
+
+    <div class="cookie-banner" id="cookieBanner" role="region" aria-label="Cookies">
+      <div>
+        <strong>Cookies & privacy</strong>
+        <p>
+          Necessary cookies keep the site running. Optional preferences can be
+          configured later.
+        </p>
+      </div>
+      <button class="button button--accent" type="button" id="acceptCookies">Accept & continue</button>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
