@@ -6,15 +6,15 @@
     <title>P&amp;C Supplements | Laboratorio Cientifico Peru</title>
     <meta
       name="description"
-      content="P&C Supplements es una tienda cientifica de laboratorio en Peru con espacios de producto en blanco y precios en soles."
+      content="P&C Supplements es una tienda cientifica de laboratorio en Peru con catalogo de productos y precios en soles."
     />
     <link
       rel="icon"
-      href="./logo.svg?v=transcrito-palette"
+      href="./logo.svg?v=product-catalog"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=transcrito-palette" />
+    <link rel="stylesheet" href="./styles.css?v=product-catalog" />
   </head>
   <body>
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=transcrito-palette" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=product-catalog" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -93,7 +93,7 @@
           <h1 class="hero-title hero-title--text">P&amp;C Supplements</h1>
           <p data-i18n="heroCopy">
             Un catalogo de enfoque cientifico para Peru, con presentacion de
-            laboratorio, espacios listos para certificados y pago en soles.
+            laboratorio, fichas listas para certificados y pago en soles.
           </p>
           <div class="hero__actions">
             <button class="button button--accent" type="button" data-scroll-target="products">
@@ -123,25 +123,25 @@
           <div class="category-grid" role="list">
             <button class="category-card active" type="button" data-category="all" role="listitem">
               <span class="category-card__icon"><i data-lucide="microscope" aria-hidden="true"></i></span>
-              <span data-i18n="catMicroscopy">Microscopia</span>
+              <span data-i18n="catMicroscopy">Todos</span>
             </button>
             <button class="category-card" type="button" data-category="bioregulators" role="listitem">
               <span class="category-card__icon"><i data-lucide="activity" aria-hidden="true"></i></span>
-              <span data-i18n="catAnalytes">Analitos</span>
+              <span data-i18n="catAnalytes">Bioreguladores</span>
             </button>
-            <button class="category-card" type="button" data-category="glp" role="listitem">
+            <button class="category-card" type="button" data-category="glp-1" role="listitem">
               <span class="category-card__icon"><i data-lucide="flask-conical" aria-hidden="true"></i></span>
-              <span data-i18n="catFormulas">Formulas</span>
+              <span data-i18n="catFormulas">GLP-1</span>
             </button>
             <button class="category-card" type="button" data-category="sarms" role="listitem">
               <span class="category-card__icon"><i data-lucide="atom" aria-hidden="true"></i></span>
-              <span data-i18n="catCompounds">Compuestos</span>
+              <span data-i18n="catCompounds">SARMs</span>
             </button>
             <button class="category-card" type="button" data-category="nootropics" role="listitem">
               <span class="category-card__icon"><i data-lucide="brain" aria-hidden="true"></i></span>
-              <span data-i18n="catMethods">Metodos</span>
+              <span data-i18n="catMethods">Nootropicos</span>
             </button>
-            <button class="category-card" type="button" data-category="supplies" role="listitem">
+            <button class="category-card" type="button" data-category="research-supplies" role="listitem">
               <span class="category-card__icon"><i data-lucide="package-open" aria-hidden="true"></i></span>
               <span data-i18n="catSupplies">Insumos de laboratorio</span>
             </button>
@@ -152,46 +152,13 @@
       <section class="product-section" id="products" aria-labelledby="productsTitle">
         <div class="container">
           <div class="section-heading">
-            <h2 id="productsTitle" data-i18n="productsTitle">Suplementos destacados</h2>
+            <h2 id="productsTitle" data-i18n="productsTitle">Catalogo de productos</h2>
             <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo</span> <span aria-hidden="true">→</span></button>
           </div>
 
           <p class="search-status" id="searchStatus" aria-live="polite"></p>
 
-          <div class="product-grid" id="productGrid" aria-label="Product grid">
-            <article class="product-card" data-product-card data-category="all">
-              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
-              <div class="product-card__body">
-                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
-                <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="1" data-i18n="addCart">Agregar al carrito</button>
-              </div>
-            </article>
-            <article class="product-card" data-product-card data-category="glp">
-              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
-              <div class="product-card__body">
-                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
-                <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="2" data-i18n="addCart">Agregar al carrito</button>
-              </div>
-            </article>
-            <article class="product-card" data-product-card data-category="bioregulators">
-              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
-              <div class="product-card__body">
-                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
-                <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="3" data-i18n="addCart">Agregar al carrito</button>
-              </div>
-            </article>
-            <article class="product-card" data-product-card data-category="supplies">
-              <a class="product-card__visual" href="#products" aria-label="Product detail"></a>
-              <div class="product-card__body">
-                <a class="blank-line blank-line--title" href="#products" aria-label="Blank product title"></a>
-                <span class="product-price">S/ 100.00</span>
-                <button class="button button--dark add-cart" type="button" data-product-id="4" data-i18n="addCart">Agregar al carrito</button>
-              </div>
-            </article>
-          </div>
+          <div class="product-grid" id="productGrid" aria-label="Product grid"></div>
         </div>
       </section>
 
@@ -307,7 +274,7 @@
             <button class="faq__item" type="button" aria-expanded="false">
               <span data-i18n="faqCurrencyQ">Que moneda usa el checkout?</span>
               <i data-lucide="chevron-down" aria-hidden="true"></i>
-              <small data-i18n="faqCurrencyA">Todos los espacios de producto cuestan S/ 100.00 en PEN.</small>
+              <small data-i18n="faqCurrencyA">Todos los productos cuestan S/ 100.00 en PEN.</small>
             </button>
             <button class="faq__item" type="button" aria-expanded="false">
               <span data-i18n="faqDocsQ">Donde van los documentos de calidad?</span>
@@ -405,13 +372,13 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=transcrito-palette" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=product-catalog" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
           <p data-i18n="footerCopy">
-            Una tienda cientifica premium enfocada en Peru, con espacios de
-            catalogo en blanco, precios en soles y puntos de soporte.
+            Una tienda cientifica premium enfocada en Peru, con catalogo de
+            laboratorio, precios en soles y puntos de soporte.
           </p>
         </div>
         <nav aria-label="Enlaces de compania" data-i18n-aria="footerCompanyAria">
@@ -549,6 +516,7 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="./app.js?v=transcrito-palette"></script>
+    <script src="./products.js?v=product-catalog"></script>
+    <script src="./app.js?v=product-catalog"></script>
   </body>
 </html>

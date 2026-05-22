@@ -7,18 +7,45 @@
     language: "es",
     reviewIndex: 0,
     selectedCategory: "all",
+    searchQuery: "",
     toastTimer: null,
   };
 
   const LANGUAGE_STORAGE_KEY = "pcLanguage";
   const PRODUCT_PRICE = 100;
   const PRODUCT_PRICE_LABEL = "S/ 100.00";
+  const PRODUCTS = Array.isArray(window.PC_PRODUCTS) ? window.PC_PRODUCTS : [];
+  const PRODUCTS_BY_ID = new Map(PRODUCTS.map((product) => [product.id, product]));
+  const CATEGORY_LABELS = {
+    es: {
+      "all-products": "Todos",
+      bioregulators: "Bioreguladores",
+      "gh-analogs-and-secretagogues": "GH analogos",
+      "glp-1": "GLP-1",
+      gonadotropins: "Gonadotropinas",
+      "monoclonal-antibodies-mabs": "Anticuerpos monoclonales",
+      "myostatin-inhibitors": "Inhibidores de miostatina",
+      nasal: "Nasal",
+      nootropics: "Nootropicos",
+      "other-products": "Otros productos",
+      "pellets-pill": "Pellets",
+      peptides: "Peptidos",
+      powder: "Polvo",
+      "research-supplies": "Insumos de laboratorio",
+      sarms: "SARMs",
+    },
+    en: {
+      sarms: "SARMs",
+      "glp-1": "GLP-1",
+      "monoclonal-antibodies-mabs": "Monoclonal Antibodies",
+    },
+  };
 
   const translations = {
     es: {
       pageTitle: "P&C Supplements | Laboratorio Cientifico Peru",
       pageDescription:
-        "P&C Supplements es una tienda cientifica de laboratorio en Peru con espacios de producto en blanco y precios en soles.",
+        "P&C Supplements es una tienda cientifica de laboratorio en Peru con catalogo de productos y precios en soles.",
       topStripAria: "Datos de servicio",
       topPeru: "Laboratorio cientifico en Peru.",
       topSoles: "Precios en soles peruanos.",
@@ -45,7 +72,7 @@
       primaryAria: "Principal",
       heroEyebrow: "Lima, Peru · Laboratorio cientifico de suplementos",
       heroCopy:
-        "Un catalogo de enfoque cientifico para Peru, con presentacion de laboratorio, espacios listos para certificados y pago en soles.",
+        "Un catalogo de enfoque cientifico para Peru, con presentacion de laboratorio, fichas listas para certificados y pago en soles.",
       heroBrowse: "Ver suplementos",
       heroCertificates: "Ver certificados de calidad",
       trustSignalsAria: "Senales de confianza",
@@ -54,20 +81,20 @@
       featureRecords: "Registros de calidad",
       featureSupport: "Soporte cientifico",
       categoryTitle: "Comprar por categoria",
-      catMicroscopy: "Microscopia",
-      catAnalytes: "Analitos",
-      catFormulas: "Formulas",
-      catCompounds: "Compuestos",
-      catMethods: "Metodos",
+      catMicroscopy: "Todos",
+      catAnalytes: "Bioreguladores",
+      catFormulas: "GLP-1",
+      catCompounds: "SARMs",
+      catMethods: "Nootropicos",
       catSupplies: "Insumos de laboratorio",
-      productsTitle: "Suplementos destacados",
+      productsTitle: "Catalogo de productos",
       viewAll: "Ver todo",
       addCart: "Agregar al carrito",
       processTitle: "Construido para revision cientifica",
       processCopy:
         "Un layout cientifico para suplementos, con espacio para notas de origen, registros analiticos, metodos y documentacion de calidad.",
       processPoint1: "Precios y entrega pensados para Peru",
-      processPoint2: "Espacios en blanco listos para fotos de catalogo",
+      processPoint2: "Catalogo listo para fichas y fotos de laboratorio",
       processPoint3: "Espacio para microscopia y certificados por lote",
       learnMore: "Conocer mas",
       labImageAlt: "Cientifico trabajando con microscopio de laboratorio",
@@ -86,7 +113,7 @@
       trustTitle: "Por que los clientes confian en nosotros",
       trustCopy: "Tarjetas de confianza para compra cientifica de suplementos en Peru.",
       trustPricingTitle: "Precios locales",
-      trustPricingCopy: "Cada espacio de producto esta en S/ 100.00 para una grilla limpia.",
+      trustPricingCopy: "Cada producto esta en S/ 100.00 para una grilla limpia.",
       trustQualityTitle: "Calidad primero",
       trustQualityCopy: "Estructurado para notas analiticas, certificados y soporte.",
       trustCertificateTitle: "Listo para certificados",
@@ -101,7 +128,7 @@
       faqLocationQ: "Donde esta ubicada la tienda?",
       faqLocationA: "P&C Supplements esta configurada como tienda enfocada en Peru.",
       faqCurrencyQ: "Que moneda usa el checkout?",
-      faqCurrencyA: "Todos los espacios de producto cuestan S/ 100.00 en PEN.",
+      faqCurrencyA: "Todos los productos cuestan S/ 100.00 en PEN.",
       faqDocsQ: "Donde van los documentos de calidad?",
       faqDocsA: "Usa la seccion de certificados y las paginas de detalle de producto.",
       faqDeliveryQ: "Este layout soporta entregas en Peru?",
@@ -131,7 +158,7 @@
       emailPlaceholder: "Correo electronico",
       signUp: "Registrarse",
       footerCopy:
-        "Una tienda cientifica premium enfocada en Peru, con espacios de catalogo en blanco, precios en soles y puntos de soporte.",
+        "Una tienda cientifica premium enfocada en Peru, con catalogo de laboratorio, precios en soles y puntos de soporte.",
       footerCompanyAria: "Enlaces de compania",
       companyTitle: "Compania",
       footerPoliciesAria: "Enlaces de politicas",
@@ -170,16 +197,20 @@
         "Las cookies necesarias mantienen el sitio funcionando. Las preferencias opcionales se pueden configurar despues.",
       acceptCookies: "Aceptar y continuar",
       itemRemoved: "Articulo eliminado",
-      cartProductNameAria: "Nombre de producto en blanco",
+      cartProductNameAria: "Nombre de producto",
       removeItemAria: "Quitar articulo",
-      blankSupplementSpacesShown: "espacios de suplemento en blanco visibles",
-      addCartToast: "espacio de suplemento agregado al carrito",
+      productCount: "{count} productos disponibles.",
+      filteredProductCount: "{count} productos encontrados.",
+      searchProductCount: '{count} productos para "{query}".',
+      noProductsFound: "No encontramos productos para esa busqueda.",
+      productDetailAria: "Ver detalles de {name}",
+      addCartToast: "producto agregado al carrito",
       cartEmptyToast: "El carrito esta vacio",
       openingPaddle: "Abriendo Paddle...",
       unableStartCheckout: "No se pudo iniciar el checkout",
       noCheckoutUrl: "La transaccion de Paddle fue creada, pero no devolvio URL de checkout",
       checkoutFailed: "Fallo el checkout",
-      searchReady: 'Busqueda lista para "{query}". Los espacios de suplemento estan intencionalmente en blanco.',
+      searchReady: 'Busqueda lista para "{query}".',
       newsletterToast: "Registro recibido",
       enterAmountVolume: "Ingresa cantidad y volumen.",
       unitsPerVolume: "{value} unidades por volumen.",
@@ -198,7 +229,7 @@
     en: {
       pageTitle: "P&C Supplements | Scientific Lab Peru",
       pageDescription:
-        "P&C Supplements scientific lab storefront for Peru with blank product spaces and local sol pricing.",
+        "P&C Supplements scientific lab storefront for Peru with a product catalog and local sol pricing.",
       topStripAria: "Service highlights",
       topPeru: "Peru-based scientific lab.",
       topSoles: "Prices in Peruvian soles.",
@@ -225,7 +256,7 @@
       primaryAria: "Primary",
       heroEyebrow: "Lima, Peru · Scientific supplement lab",
       heroCopy:
-        "A lab-forward catalog for Peru with scientific presentation, certificate-ready product spaces, and local sol checkout.",
+        "A lab-forward catalog for Peru with scientific presentation, certificate-ready product cards, and local sol checkout.",
       heroBrowse: "Browse Supplements",
       heroCertificates: "View Quality Certificates",
       trustSignalsAria: "Trust signals",
@@ -234,20 +265,20 @@
       featureRecords: "Quality Records",
       featureSupport: "Scientific Support",
       categoryTitle: "Shop by Category",
-      catMicroscopy: "Microscopy",
-      catAnalytes: "Analytes",
-      catFormulas: "Formulas",
-      catCompounds: "Compounds",
-      catMethods: "Methods",
+      catMicroscopy: "All",
+      catAnalytes: "Bioregulators",
+      catFormulas: "GLP-1",
+      catCompounds: "SARMs",
+      catMethods: "Nootropics",
       catSupplies: "Lab Supplies",
-      productsTitle: "Featured Supplements",
+      productsTitle: "Product Catalog",
       viewAll: "View All",
       addCart: "Add to Cart",
       processTitle: "Built for Scientific Review",
       processCopy:
         "A scientific supplement layout with room for sourcing notes, analytical records, method details, and quality documentation.",
       processPoint1: "Peru-first pricing and delivery language",
-      processPoint2: "Blank product slots ready for catalog photos",
+      processPoint2: "Catalog ready for lab photos and product files",
       processPoint3: "Microscope and certificate placement for every batch",
       learnMore: "Learn More About Us",
       labImageAlt: "Scientist working with laboratory microscope",
@@ -266,7 +297,7 @@
       trustTitle: "Why Customers Trust Us",
       trustCopy: "Compact trust cards for scientific supplement shopping in Peru.",
       trustPricingTitle: "Local Pricing",
-      trustPricingCopy: "Every product slot is set to S/ 100.00 for a clean launch grid.",
+      trustPricingCopy: "Every product is set to S/ 100.00 for a clean launch grid.",
       trustQualityTitle: "Quality First",
       trustQualityCopy: "Structured for analytical notes, certificates, and support context.",
       trustCertificateTitle: "Certificate Ready",
@@ -281,7 +312,7 @@
       faqLocationQ: "Where is the store located?",
       faqLocationA: "P&C Supplements is set up as a Peru-focused storefront.",
       faqCurrencyQ: "What currency does checkout use?",
-      faqCurrencyA: "All product spaces are priced at S/ 100.00 using PEN.",
+      faqCurrencyA: "All products are priced at S/ 100.00 using PEN.",
       faqDocsQ: "Where do quality documents belong?",
       faqDocsA: "Use the certificate section and product detail pages.",
       faqDeliveryQ: "Can this layout support delivery in Peru?",
@@ -311,7 +342,7 @@
       emailPlaceholder: "Email address",
       signUp: "Sign Up",
       footerCopy:
-        "A premium Peru-focused scientific supplement storefront with blank catalog spaces, local sol pricing, and support touchpoints.",
+        "A premium Peru-focused scientific supplement storefront with a lab catalog, local sol pricing, and support touchpoints.",
       footerCompanyAria: "Footer company links",
       companyTitle: "Company",
       footerPoliciesAria: "Footer policy links",
@@ -350,16 +381,20 @@
         "Necessary cookies keep the site running. Optional preferences can be configured later.",
       acceptCookies: "Accept & continue",
       itemRemoved: "Item removed",
-      cartProductNameAria: "Blank product name",
+      cartProductNameAria: "Product name",
       removeItemAria: "Remove item",
-      blankSupplementSpacesShown: "blank supplement spaces shown",
-      addCartToast: "supplement space added to cart",
+      productCount: "{count} products available.",
+      filteredProductCount: "{count} products found.",
+      searchProductCount: '{count} products for "{query}".',
+      noProductsFound: "No products matched that search.",
+      productDetailAria: "View details for {name}",
+      addCartToast: "product added to cart",
       cartEmptyToast: "Cart is empty",
       openingPaddle: "Opening Paddle...",
       unableStartCheckout: "Unable to start checkout",
       noCheckoutUrl: "Paddle transaction created, but no checkout URL was returned",
       checkoutFailed: "Checkout failed",
-      searchReady: 'Search ready for "{query}". Supplement slots are intentionally blank.',
+      searchReady: 'Search ready for "{query}".',
       newsletterToast: "Sign-up received",
       enterAmountVolume: "Enter amount and volume.",
       unitsPerVolume: "{value} units per volume.",
@@ -390,7 +425,7 @@
         date: "04 mayo 2026",
       },
       {
-        quote: "Los espacios de producto estan limpios y listos para el catalogo final.",
+        quote: "El catalogo se ve limpio y listo para revision final.",
         author: "Socio comercial",
         date: "28 abril 2026",
       },
@@ -407,7 +442,7 @@
         date: "04 May 2026",
       },
       {
-        quote: "The product spaces are clean and ready for final catalog content.",
+        quote: "The catalog feels clean and ready for final review.",
         author: "Retail partner",
         date: "28 April 2026",
       },
@@ -461,6 +496,7 @@
       showToast(t("languageChanged"));
     }
     applyLanguage();
+    renderProducts();
     renderCart();
     renderReview();
     const calculatorOutput = $("#calculatorOutput");
@@ -479,6 +515,40 @@
 
   function formatPrice(amount) {
     return `S/ ${amount.toFixed(2)}`;
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (character) => {
+      const replacements = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+      return replacements[character];
+    });
+  }
+
+  function normalizeText(value) {
+    return String(value)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function getCategoryLabel(product) {
+    return CATEGORY_LABELS[state.language]?.[product.category] || product.categoryLabel || product.category;
+  }
+
+  function getProductCode(productName) {
+    const words = productName.match(/[a-z0-9]+/gi) || [];
+    return words
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .padEnd(2, "P");
   }
 
   function scrollToId(id) {
@@ -526,7 +596,7 @@
           <div class="cart-line">
             <span class="cart-line__thumb" aria-hidden="true"></span>
             <span>
-              <strong aria-label="${t("cartProductNameAria")}"></strong>
+              <strong aria-label="${t("cartProductNameAria")}">${escapeHtml(item.title || t("cartProductNameAria"))}</strong>
               <small>${PRODUCT_PRICE_LABEL}</small>
             </span>
             <button type="button" data-remove-cart="${index}" aria-label="${t("removeItemAria")}">
@@ -539,22 +609,85 @@
     initIcons();
   }
 
-  function filterProducts(category) {
+  function getFilteredProducts() {
+    const query = normalizeText(state.searchQuery);
+    return PRODUCTS.filter((product) => {
+      const categoryMatches = state.selectedCategory === "all" || product.category === state.selectedCategory;
+      if (!categoryMatches) return false;
+      if (!query) return true;
+
+      const searchText = normalizeText(
+        [product.name, product.category, product.categoryLabel, getCategoryLabel(product)].join(" "),
+      );
+      return searchText.includes(query);
+    });
+  }
+
+  function updateProductStatus(count) {
+    const searchStatus = $("#searchStatus");
+    if (!searchStatus) return;
+    if (!count) {
+      searchStatus.textContent = t("noProductsFound");
+      return;
+    }
+
+    if (state.searchQuery) {
+      searchStatus.textContent = t("searchProductCount", {
+        count: String(count),
+        query: state.searchQuery,
+      });
+      return;
+    }
+
+    searchStatus.textContent =
+      state.selectedCategory === "all"
+        ? t("productCount", { count: String(count) })
+        : t("filteredProductCount", { count: String(count) });
+  }
+
+  function renderProducts() {
+    const grid = $("#productGrid");
+    if (!grid) return;
+
+    const products = getFilteredProducts();
+    updateProductStatus(products.length);
+
+    if (!products.length) {
+      grid.innerHTML = `<div class="product-empty" role="status">${t("noProductsFound")}</div>`;
+      return;
+    }
+
+    grid.innerHTML = products
+      .map((product) => {
+        const productName = escapeHtml(product.name);
+        const productLabel = escapeHtml(getCategoryLabel(product));
+        return `
+          <article class="product-card" data-product-card data-category="${escapeHtml(product.category)}">
+            <a class="product-card__visual" href="#products" aria-label="${escapeHtml(t("productDetailAria", { name: product.name }))}">
+              <span class="product-card__monogram">${escapeHtml(getProductCode(product.name))}</span>
+            </a>
+            <div class="product-card__body">
+              <span class="product-card__category">${productLabel}</span>
+              <a class="product-card__title" href="#products">${productName}</a>
+              <span class="product-price">${PRODUCT_PRICE_LABEL}</span>
+              <button class="button button--dark add-cart" type="button" data-product-id="${escapeHtml(product.id)}">${t("addCart")}</button>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  function setActiveCategory(category) {
     state.selectedCategory = category;
     $$(".category-card").forEach((card) => {
       card.classList.toggle("active", card.dataset.category === category);
     });
+  }
 
-    const cards = $$("[data-product-card]");
-    let visible = 0;
-    cards.forEach((card) => {
-      const show = category === "all" || card.dataset.category === category;
-      card.hidden = !show;
-      if (show) visible += 1;
-    });
-
-    $("#searchStatus").textContent =
-      category === "all" ? "" : `${visible} ${t("blankSupplementSpacesShown")}.`;
+  function filterProducts(category) {
+    setActiveCategory(category);
+    renderProducts();
   }
 
   function renderReview() {
@@ -619,16 +752,21 @@
     });
 
     $("[data-view-all]").addEventListener("click", () => {
+      state.searchQuery = "";
+      const searchInput = $("#searchInput");
+      if (searchInput) searchInput.value = "";
       filterProducts("all");
       scrollToId("products");
     });
 
-    $$(".add-cart").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.cart.push({ id: button.dataset.productId });
-        renderCart();
-        showToast(`${PRODUCT_PRICE_LABEL} ${t("addCartToast")}`);
-      });
+    $("#productGrid").addEventListener("click", (event) => {
+      const button = event.target.closest(".add-cart");
+      if (!button) return;
+      const product = PRODUCTS_BY_ID.get(button.dataset.productId);
+      if (!product) return;
+      state.cart.push({ id: product.id, title: product.name });
+      renderCart();
+      showToast(`${PRODUCT_PRICE_LABEL} ${t("addCartToast")}`);
     });
 
     $("#cartLines").addEventListener("click", (event) => {
@@ -678,13 +816,19 @@
   }
 
   function bindSearch() {
+    $("#searchInput").addEventListener("input", (event) => {
+      state.searchQuery = event.target.value.trim();
+      if (state.searchQuery) setActiveCategory("all");
+      renderProducts();
+    });
+
     $("#searchForm").addEventListener("submit", (event) => {
       event.preventDefault();
       const query = $("#searchInput").value.trim();
-      filterProducts("all");
-      $("#searchStatus").textContent = query
-        ? t("searchReady", { query })
-        : "";
+      state.searchQuery = query;
+      if (state.searchQuery) setActiveCategory("all");
+      renderProducts();
+      if (query) showToast(t("searchReady", { query }));
       scrollToId("products");
     });
   }
