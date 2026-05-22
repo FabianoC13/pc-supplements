@@ -2,15 +2,19 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PADDLE_VERSION = "1";
-const PRODUCT_PRICE_AMOUNT = "10000";
+const PRODUCT_PRICE_AMOUNT = 10000;
 const PRODUCT_PRICE_LABEL = "S/ 100.00";
 const PRODUCT_CURRENCY = "PEN";
-
-const PRODUCT_IDS = new Set(["1", "2", "3", "4"]);
+const CULQI_SECRET_PLACEHOLDER = "sk_test_REPLACE_WITH_CULQI_SECRET_KEY";
+const DEFAULT_CORS_ORIGINS = [
+  "http://127.0.0.1:5173",
+  "http://localhost:5173",
+  "https://fabianoc13.github.io",
+];
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -23,6 +27,16 @@ loadEnvFile(".env.local");
 loadEnvFile(".env");
 
 const PORT = Number(process.env.PORT || 5173);
+const HOST = process.env.HOST || "127.0.0.1";
+const CULQI_API_BASE_URL = process.env.CULQI_API_BASE_URL || "https://api.culqi.com";
+const PRODUCTS = loadProducts();
+const PRODUCT_IDS = new Set(PRODUCTS.map((product) => product.id));
+const CORS_ORIGINS = new Set(
+  (process.env.CORS_ORIGINS || DEFAULT_CORS_ORIGINS.join(","))
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
 
 function loadEnvFile(filename) {
   const filePath = path.join(__dirname, filename);
@@ -35,7 +49,28 @@ function loadEnvFile(filename) {
   }
 }
 
-function json(res, statusCode, payload) {
+function loadProducts() {
+  const context = { window: {} };
+  vm.runInNewContext(readFileSync(path.join(__dirname, "products.js"), "utf8"), context, {
+    timeout: 1000,
+  });
+  return Array.isArray(context.window.PC_PRODUCTS) ? context.window.PC_PRODUCTS : [];
+}
+
+function applyCors(req, res) {
+  const origin = req.headers.origin;
+  if (!origin) return;
+  if (!CORS_ORIGINS.has("*") && !CORS_ORIGINS.has(origin)) return;
+
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Vary", "Origin");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Max-Age", "86400");
+}
+
+function json(req, res, statusCode, payload) {
+  applyCors(req, res);
   res.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
@@ -50,64 +85,64 @@ async function readRequestJson(req) {
   return JSON.parse(Buffer.concat(chunks).toString("utf8"));
 }
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 function normalizeCartItems(rawItems) {
   const quantities = new Map();
 
   for (const item of Array.isArray(rawItems) ? rawItems : []) {
     const id = String(item?.id || "");
     if (!PRODUCT_IDS.has(id)) continue;
-    quantities.set(id, (quantities.get(id) || 0) + 1);
+    const quantity = Math.max(1, Math.min(Number(item?.quantity) || 1, 50));
+    quantities.set(id, (quantities.get(id) || 0) + quantity);
   }
 
-  return Array.from(quantities, ([id, quantity]) => ({ id, quantity }));
+  return Array.from(quantities, ([id, quantity]) => {
+    const product = PRODUCTS.find((entry) => entry.id === id);
+    return {
+      id,
+      quantity,
+      title: product?.name || id,
+    };
+  });
 }
 
-function paddleApiBaseUrl() {
-  if (process.env.PADDLE_API_BASE_URL) return process.env.PADDLE_API_BASE_URL;
-  return process.env.PADDLE_API_KEY?.includes("_sdbx_")
-    ? "https://sandbox-api.paddle.com"
-    : "https://api.paddle.com";
+function getCulqiSecretKey() {
+  return process.env.CULQI_SECRET_KEY || "";
 }
 
-function buildPaddleTransaction(items) {
+function isCulqiSecretConfigured() {
+  const key = getCulqiSecretKey();
+  return Boolean(key && key !== CULQI_SECRET_PLACEHOLDER);
+}
+
+function buildChargePayload({ items, token, email }) {
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const productSummary = items.map((item) => `${item.quantity}x ${item.title}`).join(", ");
+
   return {
-    collection_mode: "automatic",
+    amount: totalQuantity * PRODUCT_PRICE_AMOUNT,
     currency_code: PRODUCT_CURRENCY,
-    items: items.map((item) => ({
-      quantity: item.quantity,
-      price: {
-        description: `P&C Supplements placeholder item ${item.id}`,
-        name: PRODUCT_PRICE_LABEL,
-        billing_cycle: null,
-        trial_period: null,
-        tax_mode: "account_setting",
-        unit_price: {
-          amount: PRODUCT_PRICE_AMOUNT,
-          currency_code: PRODUCT_CURRENCY,
-        },
-        product: {
-          name: `P&C Supplements item ${item.id}`,
-          description: "Supplement placeholder product for the Peru storefront.",
-          tax_category: "standard",
-        },
-      },
-    })),
-    checkout: {
-      url: process.env.PADDLE_CHECKOUT_URL || null,
-    },
-    custom_data: {
-      brand: "P&C Supplements",
+    email,
+    source_id: token,
+    capture: true,
+    description: `P&C Supplements - ${totalQuantity} producto(s) a ${PRODUCT_PRICE_LABEL}`,
+    metadata: {
+      product_count: String(totalQuantity),
+      products: productSummary.slice(0, 500),
+      channel: "web",
       location: "Peru",
-      currency: PRODUCT_CURRENCY,
     },
   };
 }
 
-async function createPaddleCheckout(req, res) {
-  const apiKey = process.env.PADDLE_API_KEY;
-  if (!apiKey) {
-    json(res, 503, {
-      error: "Paddle API key missing. Set PADDLE_API_KEY on the server.",
+async function createCulqiCharge(req, res) {
+  if (!isCulqiSecretConfigured()) {
+    json(req, res, 503, {
+      error: "Culqi private key missing. Set CULQI_SECRET_KEY on the EC2 server.",
+      code: "CULQI_SECRET_MISSING",
     });
     return;
   }
@@ -116,38 +151,53 @@ async function createPaddleCheckout(req, res) {
   try {
     body = await readRequestJson(req);
   } catch {
-    json(res, 400, { error: "Invalid checkout request." });
+    json(req, res, 400, { error: "Invalid checkout request." });
     return;
   }
 
+  const token = String(body.token || body.source_id || "").trim();
+  const email = String(body.email || "").trim();
   const items = normalizeCartItems(body.items);
-  if (!items.length) {
-    json(res, 400, { error: "Cart is empty." });
+
+  if (!token) {
+    json(req, res, 400, { error: "Payment token is required." });
     return;
   }
 
-  const paddleResponse = await fetch(`${paddleApiBaseUrl()}/transactions`, {
+  if (!isValidEmail(email)) {
+    json(req, res, 400, { error: "A valid email is required." });
+    return;
+  }
+
+  if (!items.length) {
+    json(req, res, 400, { error: "Cart is empty." });
+    return;
+  }
+
+  const culqiResponse = await fetch(`${CULQI_API_BASE_URL}/v2/charges`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${getCulqiSecretKey()}`,
       "Content-Type": "application/json",
-      "Paddle-Version": PADDLE_VERSION,
     },
-    body: JSON.stringify(buildPaddleTransaction(items)),
+    body: JSON.stringify(buildChargePayload({ items, token, email })),
   });
 
-  const paddleBody = await paddleResponse.json().catch(() => ({}));
-  if (!paddleResponse.ok) {
-    json(res, paddleResponse.status, {
-      error: paddleBody?.error?.detail || "Paddle rejected the checkout request.",
-      requestId: paddleBody?.meta?.request_id,
+  const culqiBody = await culqiResponse.json().catch(() => ({}));
+  if (!culqiResponse.ok) {
+    json(req, res, culqiResponse.status, {
+      error: culqiBody?.merchant_message || culqiBody?.user_message || culqiBody?.message || "Culqi rejected the charge.",
+      code: culqiBody?.code,
+      declineCode: culqiBody?.decline_code,
     });
     return;
   }
 
-  json(res, 201, {
-    transactionId: paddleBody.data?.id,
-    checkoutUrl: paddleBody.data?.checkout?.url,
+  json(req, res, 201, {
+    chargeId: culqiBody.id,
+    amount: culqiBody.amount,
+    currency: culqiBody.currency_code,
+    status: culqiBody.outcome?.type || "created",
   });
 }
 
@@ -168,7 +218,8 @@ async function serveStatic(req, res) {
     res.writeHead(200, {
       "Content-Type": MIME_TYPES[path.extname(filePath)] || "application/octet-stream",
     });
-    res.end(file);
+    if (req.method !== "HEAD") res.end(file);
+    else res.end();
   } catch {
     res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
     res.end("Not found");
@@ -177,8 +228,26 @@ async function serveStatic(req, res) {
 
 const server = createServer(async (req, res) => {
   try {
-    if (req.method === "POST" && req.url === "/api/checkout") {
-      await createPaddleCheckout(req, res);
+    const requestUrl = new URL(req.url, `http://${req.headers.host}`);
+
+    if (req.method === "OPTIONS" && requestUrl.pathname.startsWith("/api/")) {
+      applyCors(req, res);
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    if (req.method === "GET" && requestUrl.pathname === "/api/health") {
+      json(req, res, 200, {
+        ok: true,
+        provider: "culqi",
+        culqiConfigured: isCulqiSecretConfigured(),
+      });
+      return;
+    }
+
+    if (req.method === "POST" && requestUrl.pathname === "/api/checkout") {
+      await createCulqiCharge(req, res);
       return;
     }
 
@@ -187,13 +256,13 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    res.writeHead(405, { Allow: "GET, HEAD, POST" });
+    res.writeHead(405, { Allow: "GET, HEAD, POST, OPTIONS" });
     res.end("Method not allowed");
   } catch {
-    json(res, 500, { error: "Unexpected server error." });
+    json(req, res, 500, { error: "Unexpected server error." });
   }
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log(`P&C Supplements running at http://127.0.0.1:${PORT}/`);
+server.listen(PORT, HOST, () => {
+  console.log(`P&C Supplements running at http://${HOST}:${PORT}/`);
 });

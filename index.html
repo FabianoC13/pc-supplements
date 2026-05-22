@@ -10,11 +10,11 @@
     />
     <link
       rel="icon"
-      href="./logo.svg?v=product-catalog"
+      href="./logo.svg?v=culqi-card"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=product-catalog" />
+    <link rel="stylesheet" href="./styles.css?v=culqi-card" />
   </head>
   <body>
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=product-catalog" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=culqi-card" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -172,7 +172,7 @@
             </p>
             <ul class="check-list">
               <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint1">Precios y entrega pensados para Peru</span></li>
-              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint2">Espacios en blanco listos para fotos de catalogo</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint2">Catalogo listo para fichas y fotos de laboratorio</span></li>
               <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint3">Espacio para microscopia y certificados por lote</span></li>
             </ul>
             <button class="button button--outline" type="button" data-scroll-target="quality">
@@ -372,7 +372,7 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=product-catalog" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=culqi-card" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
@@ -439,8 +439,18 @@
         <div class="cart-lines" id="cartLines">
           <p data-i18n="cartEmpty">Tu carrito esta vacio.</p>
         </div>
+        <label class="cart-checkout-field" for="checkoutEmail">
+          <span data-i18n="checkoutEmailLabel">Correo para el pago</span>
+          <input
+            id="checkoutEmail"
+            type="email"
+            autocomplete="email"
+            placeholder="correo@ejemplo.com"
+            data-i18n-placeholder="checkoutEmailPlaceholder"
+          />
+        </label>
         <div class="cart-total" id="cartTotal">Total: S/ 0.00</div>
-        <button class="button button--dark checkout-button" type="button" id="checkoutButton" data-i18n="checkoutButton">Pagar con Paddle</button>
+        <button class="button button--dark checkout-button" type="button" id="checkoutButton" data-i18n="checkoutButton">Pagar con tarjeta</button>
       </div>
     </aside>
 
@@ -516,7 +526,9 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="./products.js?v=product-catalog"></script>
-    <script src="./app.js?v=product-catalog"></script>
+    <script src="https://js.culqi.com/checkout-js"></script>
+    <script src="./config.js?v=culqi-card"></script>
+    <script src="./products.js?v=culqi-card"></script>
+    <script src="./app.js?v=culqi-card"></script>
   </body>
 </html>

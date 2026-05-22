@@ -1327,6 +1327,31 @@ body.is-loaded .hero__media {
   background: transparent;
 }
 
+.cart-checkout-field {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 14px;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.cart-checkout-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+}
+
+.cart-checkout-field input:focus {
+  outline: 2px solid rgba(19, 52, 98, 0.24);
+  outline-offset: 2px;
+}
+
 .checkout-button {
   width: 100%;
 }

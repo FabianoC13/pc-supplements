@@ -8,12 +8,17 @@
     reviewIndex: 0,
     selectedCategory: "all",
     searchQuery: "",
+    culqiCheckout: null,
+    checkoutInFlight: false,
     toastTimer: null,
   };
 
   const LANGUAGE_STORAGE_KEY = "pcLanguage";
   const PRODUCT_PRICE = 100;
   const PRODUCT_PRICE_LABEL = "S/ 100.00";
+  const PRODUCT_PRICE_CENTS = 10000;
+  const CONFIG = window.PC_CONFIG || {};
+  const CULQI_PUBLIC_KEY_PLACEHOLDER = "pk_test_REPLACE_WITH_CULQI_PUBLIC_KEY";
   const PRODUCTS = Array.isArray(window.PC_PRODUCTS) ? window.PC_PRODUCTS : [];
   const PRODUCTS_BY_ID = new Map(PRODUCTS.map((product) => [product.id, product]));
   const CATEGORY_LABELS = {
@@ -175,7 +180,9 @@
       closeCartAria: "Cerrar carrito",
       cartEmpty: "Tu carrito esta vacio.",
       totalLabel: "Total",
-      checkoutButton: "Pagar con Paddle",
+      checkoutEmailLabel: "Correo para el pago",
+      checkoutEmailPlaceholder: "correo@ejemplo.com",
+      checkoutButton: "Pagar con tarjeta",
       closeAccountAria: "Cerrar cuenta",
       accountTitle: "Cuenta",
       signIn: "Iniciar sesion",
@@ -186,7 +193,7 @@
       noticeTitle: "Aviso importante — Tienda de suplementos",
       noticeSub: "Lee antes de entrar a este sitio.",
       noticeCopy:
-        "Esta tienda es un layout cientifico de suplementos e integracion de pago para Peru. Las etiquetas, afirmaciones analiticas, ingredientes y reglas de compra finales deben revisarse antes del lanzamiento.",
+        "Esta tienda es un layout cientifico de suplementos e integracion de pago con Culqi para Peru. Las etiquetas, afirmaciones analiticas, ingredientes y reglas de compra finales deben revisarse antes del lanzamiento.",
       noticePoint1: "Tienes al menos 18 anos.",
       noticePoint2: "Revisaras las etiquetas antes de comprar.",
       noticePoint3: "Aceptas responsabilidad por cumplimiento local y decisiones de uso.",
@@ -206,9 +213,15 @@
       productDetailAria: "Ver detalles de {name}",
       addCartToast: "producto agregado al carrito",
       cartEmptyToast: "El carrito esta vacio",
-      openingPaddle: "Abriendo Paddle...",
+      checkoutEmailRequired: "Ingresa un correo valido para pagar",
+      openingCulqi: "Abriendo Culqi...",
       unableStartCheckout: "No se pudo iniciar el checkout",
-      noCheckoutUrl: "La transaccion de Paddle fue creada, pero no devolvio URL de checkout",
+      culqiPublicKeyMissing: "Falta configurar la llave publica de Culqi",
+      culqiScriptMissing: "No se pudo cargar Culqi Checkout",
+      culqiTokenMissing: "Culqi no devolvio un token de pago",
+      culqiProcessing: "Procesando pago...",
+      paymentSuccess: "Pago recibido. Carrito vaciado.",
+      backendPlaceholder: "El backend de Culqi aun no tiene llave privada configurada",
       checkoutFailed: "Fallo el checkout",
       searchReady: 'Busqueda lista para "{query}".',
       newsletterToast: "Registro recibido",
@@ -359,7 +372,9 @@
       closeCartAria: "Close cart",
       cartEmpty: "Your cart is empty.",
       totalLabel: "Total",
-      checkoutButton: "Checkout with Paddle",
+      checkoutEmailLabel: "Payment email",
+      checkoutEmailPlaceholder: "email@example.com",
+      checkoutButton: "Pay by card",
       closeAccountAria: "Close account",
       accountTitle: "Account",
       signIn: "Sign In",
@@ -370,7 +385,7 @@
       noticeTitle: "Important Notice — Supplement Store",
       noticeSub: "Please read before entering this website.",
       noticeCopy:
-        "This storefront is a scientific supplement layout and checkout integration for Peru. Final labels, analytical claims, ingredients, and purchasing rules should be reviewed before launch.",
+        "This storefront is a scientific supplement layout and Culqi checkout integration for Peru. Final labels, analytical claims, ingredients, and purchasing rules should be reviewed before launch.",
       noticePoint1: "You are at least 18 years of age.",
       noticePoint2: "You will review product labels before purchasing.",
       noticePoint3: "You accept responsibility for local compliance and usage decisions.",
@@ -390,9 +405,15 @@
       productDetailAria: "View details for {name}",
       addCartToast: "product added to cart",
       cartEmptyToast: "Cart is empty",
-      openingPaddle: "Opening Paddle...",
+      checkoutEmailRequired: "Enter a valid email to pay",
+      openingCulqi: "Opening Culqi...",
       unableStartCheckout: "Unable to start checkout",
-      noCheckoutUrl: "Paddle transaction created, but no checkout URL was returned",
+      culqiPublicKeyMissing: "Culqi public key is not configured",
+      culqiScriptMissing: "Culqi Checkout could not be loaded",
+      culqiTokenMissing: "Culqi did not return a payment token",
+      culqiProcessing: "Processing payment...",
+      paymentSuccess: "Payment received. Cart cleared.",
+      backendPlaceholder: "The Culqi backend still needs its private key",
       checkoutFailed: "Checkout failed",
       searchReady: 'Search ready for "{query}".',
       newsletterToast: "Sign-up received",
@@ -549,6 +570,164 @@
       .join("")
       .toUpperCase()
       .padEnd(2, "P");
+  }
+
+  function getApiUrl(path) {
+    const baseUrl = String(CONFIG.API_BASE_URL || "").replace(/\/$/, "");
+    return baseUrl ? `${baseUrl}${path}` : path;
+  }
+
+  function getCheckoutEmail() {
+    return ($("#checkoutEmail")?.value || "").trim();
+  }
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function getCartAmountCents() {
+    return state.cart.length * PRODUCT_PRICE_CENTS;
+  }
+
+  function getCartLineSummary() {
+    const quantities = new Map();
+    state.cart.forEach((item) => {
+      quantities.set(item.id, (quantities.get(item.id) || 0) + 1);
+    });
+    return Array.from(quantities, ([id, quantity]) => {
+      const product = PRODUCTS_BY_ID.get(id);
+      return {
+        id,
+        quantity,
+        title: product?.name || id,
+        unitAmount: PRODUCT_PRICE_CENTS,
+      };
+    });
+  }
+
+  function isCulqiPublicKeyConfigured() {
+    return Boolean(CONFIG.CULQI_PUBLIC_KEY) && CONFIG.CULQI_PUBLIC_KEY !== CULQI_PUBLIC_KEY_PLACEHOLDER;
+  }
+
+  function getCulqiAppearance() {
+    const styles = getComputedStyle(document.documentElement);
+    const accent = styles.getPropertyValue("--accent").trim() || "#133462";
+    const ink = styles.getPropertyValue("--ink").trim() || "#2a2420";
+    const paper = styles.getPropertyValue("--paper").trim() || "#faf9f5";
+
+    return {
+      theme: "default",
+      hiddenCulqiLogo: false,
+      hiddenBannerContent: false,
+      hiddenBanner: false,
+      hiddenToolBarAmount: false,
+      hiddenEmail: false,
+      menuType: "select",
+      buttonCardPayText: t("checkoutButton"),
+      logo: new URL("./logo.svg", window.location.href).href,
+      defaultStyle: {
+        bannerColor: accent,
+        buttonBackground: ink,
+        menuColor: accent,
+        linksColor: accent,
+        buttonTextColor: paper,
+        priceColor: ink,
+      },
+    };
+  }
+
+  function buildCulqiCheckout(email) {
+    if (!window.CulqiCheckout) throw new Error(t("culqiScriptMissing"));
+    if (!isCulqiPublicKeyConfigured()) throw new Error(t("culqiPublicKeyMissing"));
+
+    const settings = {
+      title: "P&C Supplements",
+      currency: "PEN",
+      amount: getCartAmountCents(),
+    };
+
+    if (CONFIG.CULQI_RSA_ID && CONFIG.CULQI_RSA_PUBLIC_KEY) {
+      settings.xculqirsaid = CONFIG.CULQI_RSA_ID;
+      settings.rsapublickey = CONFIG.CULQI_RSA_PUBLIC_KEY;
+    }
+
+    const paymentMethods = {
+      tarjeta: true,
+      yape: false,
+      billetera: false,
+      bancaMovil: false,
+      agente: false,
+      cuotealo: false,
+    };
+
+    const checkout = new window.CulqiCheckout(CONFIG.CULQI_PUBLIC_KEY, {
+      settings,
+      client: { email },
+      options: {
+        lang: state.language === "es" ? "es" : "en",
+        installments: false,
+        modal: true,
+        paymentMethods,
+        paymentMethodsSort: ["tarjeta"],
+      },
+      appearance: getCulqiAppearance(),
+    });
+
+    checkout.culqi = handleCulqiAction;
+    return checkout;
+  }
+
+  async function submitCulqiCharge(token) {
+    if (!token) throw new Error(t("culqiTokenMissing"));
+    state.checkoutInFlight = true;
+    showToast(t("culqiProcessing"));
+
+    const response = await fetch(getApiUrl("/api/checkout"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        email: getCheckoutEmail(),
+        items: getCartLineSummary(),
+      }),
+    });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        data.code === "CULQI_SECRET_MISSING"
+          ? t("backendPlaceholder")
+          : data.error || t("unableStartCheckout"),
+      );
+    }
+
+    state.cart = [];
+    renderCart();
+    closeDrawers();
+    showToast(t("paymentSuccess"));
+  }
+
+  async function handleCulqiAction() {
+    const checkout = state.culqiCheckout;
+
+    try {
+      if (checkout?.token?.id) {
+        const token = checkout.token.id;
+        checkout.close();
+        await submitCulqiCharge(token);
+        return;
+      }
+
+      if (checkout?.error) {
+        throw new Error(checkout.error.user_message || checkout.error.message || t("checkoutFailed"));
+      }
+
+      throw new Error(t("culqiTokenMissing"));
+    } catch (error) {
+      showToast(error.message || t("checkoutFailed"));
+    } finally {
+      state.checkoutInFlight = false;
+    }
   }
 
   function scrollToId(id) {
@@ -783,29 +962,21 @@
         return;
       }
 
+      const email = getCheckoutEmail();
+      if (!isValidEmail(email)) {
+        showToast(t("checkoutEmailRequired"));
+        $("#checkoutEmail")?.focus();
+        return;
+      }
+
       const button = $("#checkoutButton");
       const originalText = t("checkoutButton");
       button.disabled = true;
-      button.textContent = t("openingPaddle");
+      button.textContent = t("openingCulqi");
 
       try {
-        const response = await fetch("/api/checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: state.cart }),
-        });
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(data.error || t("unableStartCheckout"));
-        }
-
-        if (data.checkoutUrl) {
-          window.location.href = data.checkoutUrl;
-          return;
-        }
-
-        showToast(t("noCheckoutUrl"));
+        state.culqiCheckout = buildCulqiCheckout(email);
+        state.culqiCheckout.open();
       } catch (error) {
         showToast(error.message || t("checkoutFailed"));
       } finally {
