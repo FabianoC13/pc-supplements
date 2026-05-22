@@ -10,11 +10,11 @@
     />
     <link
       rel="icon"
-      href="./logo.svg?v=culqi-card"
+      href="./logo.svg?v=hybrid-payments"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=culqi-card" />
+    <link rel="stylesheet" href="./styles.css?v=hybrid-payments" />
   </head>
   <body>
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=culqi-card" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=hybrid-payments" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -372,7 +372,7 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=culqi-card" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=hybrid-payments" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
@@ -438,6 +438,16 @@
         </div>
         <div class="cart-lines" id="cartLines">
           <p data-i18n="cartEmpty">Tu carrito esta vacio.</p>
+        </div>
+        <div class="payment-method" role="group" aria-label="Metodo de pago" data-i18n-aria="paymentMethodLabel">
+          <button class="payment-method__option active" type="button" data-payment-method="card" aria-pressed="true">
+            <i data-lucide="credit-card" aria-hidden="true"></i>
+            <span data-i18n="payByCard">Tarjeta</span>
+          </button>
+          <button class="payment-method__option" type="button" data-payment-method="crypto" aria-pressed="false">
+            <i data-lucide="bitcoin" aria-hidden="true"></i>
+            <span data-i18n="payByCrypto">Cripto</span>
+          </button>
         </div>
         <label class="cart-checkout-field" for="checkoutEmail">
           <span data-i18n="checkoutEmailLabel">Correo para el pago</span>
@@ -527,8 +537,8 @@
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://js.culqi.com/checkout-js"></script>
-    <script src="./config.js?v=culqi-card"></script>
-    <script src="./products.js?v=culqi-card"></script>
-    <script src="./app.js?v=culqi-card"></script>
+    <script src="./config.js?v=hybrid-payments"></script>
+    <script src="./products.js?v=hybrid-payments"></script>
+    <script src="./app.js?v=hybrid-payments"></script>
   </body>
 </html>

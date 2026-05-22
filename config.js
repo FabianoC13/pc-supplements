@@ -3,4 +3,5 @@ window.PC_CONFIG = {
   CULQI_RSA_ID: "",
   CULQI_RSA_PUBLIC_KEY: "",
   API_BASE_URL: "",
+  DEFAULT_PAYMENT_METHOD: "card",
 };

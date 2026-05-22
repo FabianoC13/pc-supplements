@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import crypto from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -10,6 +11,8 @@ const PRODUCT_PRICE_AMOUNT = 10000;
 const PRODUCT_PRICE_LABEL = "S/ 100.00";
 const PRODUCT_CURRENCY = "PEN";
 const CULQI_SECRET_PLACEHOLDER = "sk_test_REPLACE_WITH_CULQI_SECRET_KEY";
+const NOWPAYMENTS_API_KEY_PLACEHOLDER = "np_test_REPLACE_WITH_NOWPAYMENTS_API_KEY";
+const NOWPAYMENTS_IPN_SECRET_PLACEHOLDER = "np_ipn_REPLACE_WITH_NOWPAYMENTS_IPN_SECRET";
 const DEFAULT_CORS_ORIGINS = [
   "http://127.0.0.1:5173",
   "http://localhost:5173",
@@ -29,6 +32,8 @@ loadEnvFile(".env");
 const PORT = Number(process.env.PORT || 5173);
 const HOST = process.env.HOST || "127.0.0.1";
 const CULQI_API_BASE_URL = process.env.CULQI_API_BASE_URL || "https://api.culqi.com";
+const NOWPAYMENTS_API_BASE_URL = process.env.NOWPAYMENTS_API_BASE_URL || "https://api.nowpayments.io";
+const NOWPAYMENTS_PRICE_CURRENCY = (process.env.NOWPAYMENTS_PRICE_CURRENCY || PRODUCT_CURRENCY).toLowerCase();
 const PRODUCTS = loadProducts();
 const PRODUCT_IDS = new Set(PRODUCTS.map((product) => product.id));
 const CORS_ORIGINS = new Set(
@@ -118,6 +123,41 @@ function isCulqiSecretConfigured() {
   return Boolean(key && key !== CULQI_SECRET_PLACEHOLDER);
 }
 
+function getNowPaymentsApiKey() {
+  return process.env.NOWPAYMENTS_API_KEY || "";
+}
+
+function isNowPaymentsConfigured() {
+  const key = getNowPaymentsApiKey();
+  return Boolean(key && key !== NOWPAYMENTS_API_KEY_PLACEHOLDER);
+}
+
+function getNowPaymentsIpnSecret() {
+  return process.env.NOWPAYMENTS_IPN_SECRET || "";
+}
+
+function isNowPaymentsIpnConfigured() {
+  const secret = getNowPaymentsIpnSecret();
+  return Boolean(secret && secret !== NOWPAYMENTS_IPN_SECRET_PLACEHOLDER);
+}
+
+function trimTrailingSlash(value) {
+  return String(value || "").replace(/\/$/, "");
+}
+
+function getPublicSiteUrl(req) {
+  return trimTrailingSlash(process.env.PUBLIC_SITE_URL || req.headers.origin || `http://${req.headers.host}`);
+}
+
+function getPublicApiUrl(req) {
+  return trimTrailingSlash(process.env.PUBLIC_API_URL || `http://${req.headers.host}`);
+}
+
+function parseBoolean(value, fallback) {
+  if (value === undefined) return fallback;
+  return ["1", "true", "yes", "on"].includes(String(value).toLowerCase());
+}
+
 function buildChargePayload({ items, token, email }) {
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const productSummary = items.map((item) => `${item.quantity}x ${item.title}`).join(", ");
@@ -135,6 +175,38 @@ function buildChargePayload({ items, token, email }) {
       channel: "web",
       location: "Peru",
     },
+  };
+}
+
+function createOrderId() {
+  return `pc-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+}
+
+function buildNowPaymentsInvoicePayload({ req, items, email }) {
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const productSummary = items.map((item) => `${item.quantity}x ${item.title}`).join(", ");
+  const orderId = createOrderId();
+  const siteUrl = getPublicSiteUrl(req);
+  const apiUrl = getPublicApiUrl(req);
+  const payload = {
+    price_amount: totalQuantity * (PRODUCT_PRICE_AMOUNT / 100),
+    price_currency: NOWPAYMENTS_PRICE_CURRENCY,
+    order_id: orderId,
+    order_description: `P&C Supplements - ${totalQuantity} producto(s): ${productSummary}`.slice(0, 500),
+    ipn_callback_url: `${apiUrl}/api/webhooks/nowpayments`,
+    success_url: `${siteUrl}/?payment=crypto-success&order_id=${encodeURIComponent(orderId)}`,
+    cancel_url: `${siteUrl}/?payment=crypto-cancel&order_id=${encodeURIComponent(orderId)}`,
+    is_fixed_rate: parseBoolean(process.env.NOWPAYMENTS_FIXED_RATE, true),
+    is_fee_paid_by_user: parseBoolean(process.env.NOWPAYMENTS_FEE_PAID_BY_USER, false),
+  };
+
+  if (process.env.NOWPAYMENTS_PAY_CURRENCY) {
+    payload.pay_currency = process.env.NOWPAYMENTS_PAY_CURRENCY.toLowerCase();
+  }
+
+  return {
+    orderId,
+    payload,
   };
 }
 
@@ -201,6 +273,111 @@ async function createCulqiCharge(req, res) {
   });
 }
 
+async function createNowPaymentsInvoice(req, res) {
+  if (!isNowPaymentsConfigured()) {
+    json(req, res, 503, {
+      error: "NOWPayments API key missing. Set NOWPAYMENTS_API_KEY on the EC2 server.",
+      code: "NOWPAYMENTS_API_KEY_MISSING",
+    });
+    return;
+  }
+
+  let body;
+  try {
+    body = await readRequestJson(req);
+  } catch {
+    json(req, res, 400, { error: "Invalid crypto checkout request." });
+    return;
+  }
+
+  const email = String(body.email || "").trim();
+  const items = normalizeCartItems(body.items);
+
+  if (!isValidEmail(email)) {
+    json(req, res, 400, { error: "A valid email is required." });
+    return;
+  }
+
+  if (!items.length) {
+    json(req, res, 400, { error: "Cart is empty." });
+    return;
+  }
+
+  const { orderId, payload } = buildNowPaymentsInvoicePayload({ req, items, email });
+  const nowPaymentsResponse = await fetch(`${NOWPAYMENTS_API_BASE_URL}/v1/invoice`, {
+    method: "POST",
+    headers: {
+      "x-api-key": getNowPaymentsApiKey(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const nowPaymentsBody = await nowPaymentsResponse.json().catch(() => ({}));
+  if (!nowPaymentsResponse.ok) {
+    json(req, res, nowPaymentsResponse.status, {
+      error: nowPaymentsBody?.message || nowPaymentsBody?.error || "NOWPayments rejected the invoice.",
+      code: nowPaymentsBody?.code,
+    });
+    return;
+  }
+
+  json(req, res, 201, {
+    orderId,
+    invoiceId: nowPaymentsBody.id,
+    invoiceUrl: nowPaymentsBody.invoice_url,
+  });
+}
+
+function sortForNowPayments(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+  return Object.keys(value)
+    .sort()
+    .reduce((sorted, key) => {
+      sorted[key] = sortForNowPayments(value[key]);
+      return sorted;
+    }, {});
+}
+
+function isValidNowPaymentsSignature(req, body) {
+  if (!isNowPaymentsIpnConfigured()) return false;
+  const signature = req.headers["x-nowpayments-sig"];
+  if (!signature || typeof signature !== "string") return false;
+
+  const expected = crypto
+    .createHmac("sha512", getNowPaymentsIpnSecret())
+    .update(JSON.stringify(sortForNowPayments(body)))
+    .digest("hex");
+
+  const expectedBuffer = Buffer.from(expected);
+  const signatureBuffer = Buffer.from(signature.toLowerCase());
+  return expectedBuffer.length === signatureBuffer.length && crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
+}
+
+async function handleNowPaymentsWebhook(req, res) {
+  let body;
+  try {
+    body = await readRequestJson(req);
+  } catch {
+    json(req, res, 400, { error: "Invalid NOWPayments webhook payload." });
+    return;
+  }
+
+  if (!isValidNowPaymentsSignature(req, body)) {
+    json(req, res, 401, { error: "Invalid NOWPayments signature." });
+    return;
+  }
+
+  console.log("NOWPayments IPN", {
+    paymentId: body.payment_id,
+    invoiceId: body.invoice_id,
+    orderId: body.order_id,
+    status: body.payment_status,
+  });
+
+  json(req, res, 200, { received: true });
+}
+
 async function serveStatic(req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
@@ -240,14 +417,26 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && requestUrl.pathname === "/api/health") {
       json(req, res, 200, {
         ok: true,
-        provider: "culqi",
+        providers: ["culqi", "nowpayments"],
         culqiConfigured: isCulqiSecretConfigured(),
+        nowpaymentsConfigured: isNowPaymentsConfigured(),
+        nowpaymentsIpnConfigured: isNowPaymentsIpnConfigured(),
       });
       return;
     }
 
-    if (req.method === "POST" && requestUrl.pathname === "/api/checkout") {
+    if (req.method === "POST" && ["/api/checkout", "/api/checkout/card"].includes(requestUrl.pathname)) {
       await createCulqiCharge(req, res);
+      return;
+    }
+
+    if (req.method === "POST" && requestUrl.pathname === "/api/checkout/crypto") {
+      await createNowPaymentsInvoice(req, res);
+      return;
+    }
+
+    if (req.method === "POST" && requestUrl.pathname === "/api/webhooks/nowpayments") {
+      await handleNowPaymentsWebhook(req, res);
       return;
     }
 

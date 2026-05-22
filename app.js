@@ -8,6 +8,7 @@
     reviewIndex: 0,
     selectedCategory: "all",
     searchQuery: "",
+    paymentMethod: "card",
     culqiCheckout: null,
     checkoutInFlight: false,
     toastTimer: null,
@@ -180,9 +181,13 @@
       closeCartAria: "Cerrar carrito",
       cartEmpty: "Tu carrito esta vacio.",
       totalLabel: "Total",
+      paymentMethodLabel: "Metodo de pago",
+      payByCard: "Tarjeta",
+      payByCrypto: "Cripto",
       checkoutEmailLabel: "Correo para el pago",
       checkoutEmailPlaceholder: "correo@ejemplo.com",
       checkoutButton: "Pagar con tarjeta",
+      checkoutButtonCrypto: "Pagar con cripto",
       closeAccountAria: "Cerrar cuenta",
       accountTitle: "Cuenta",
       signIn: "Iniciar sesion",
@@ -215,6 +220,7 @@
       cartEmptyToast: "El carrito esta vacio",
       checkoutEmailRequired: "Ingresa un correo valido para pagar",
       openingCulqi: "Abriendo Culqi...",
+      openingCrypto: "Creando factura cripto...",
       unableStartCheckout: "No se pudo iniciar el checkout",
       culqiPublicKeyMissing: "Falta configurar la llave publica de Culqi",
       culqiScriptMissing: "No se pudo cargar Culqi Checkout",
@@ -222,6 +228,8 @@
       culqiProcessing: "Procesando pago...",
       paymentSuccess: "Pago recibido. Carrito vaciado.",
       backendPlaceholder: "El backend de Culqi aun no tiene llave privada configurada",
+      nowpaymentsPlaceholder: "El backend de NOWPayments aun no tiene API key configurada",
+      cryptoInvoiceMissing: "NOWPayments no devolvio una URL de pago",
       checkoutFailed: "Fallo el checkout",
       searchReady: 'Busqueda lista para "{query}".',
       newsletterToast: "Registro recibido",
@@ -372,9 +380,13 @@
       closeCartAria: "Close cart",
       cartEmpty: "Your cart is empty.",
       totalLabel: "Total",
+      paymentMethodLabel: "Payment method",
+      payByCard: "Card",
+      payByCrypto: "Crypto",
       checkoutEmailLabel: "Payment email",
       checkoutEmailPlaceholder: "email@example.com",
       checkoutButton: "Pay by card",
+      checkoutButtonCrypto: "Pay with crypto",
       closeAccountAria: "Close account",
       accountTitle: "Account",
       signIn: "Sign In",
@@ -407,6 +419,7 @@
       cartEmptyToast: "Cart is empty",
       checkoutEmailRequired: "Enter a valid email to pay",
       openingCulqi: "Opening Culqi...",
+      openingCrypto: "Creating crypto invoice...",
       unableStartCheckout: "Unable to start checkout",
       culqiPublicKeyMissing: "Culqi public key is not configured",
       culqiScriptMissing: "Culqi Checkout could not be loaded",
@@ -414,6 +427,8 @@
       culqiProcessing: "Processing payment...",
       paymentSuccess: "Payment received. Cart cleared.",
       backendPlaceholder: "The Culqi backend still needs its private key",
+      nowpaymentsPlaceholder: "The NOWPayments backend still needs its API key",
+      cryptoInvoiceMissing: "NOWPayments did not return a payment URL",
       checkoutFailed: "Checkout failed",
       searchReady: 'Search ready for "{query}".',
       newsletterToast: "Sign-up received",
@@ -519,6 +534,7 @@
     applyLanguage();
     renderProducts();
     renderCart();
+    renderPaymentMethod();
     renderReview();
     const calculatorOutput = $("#calculatorOutput");
     if (calculatorOutput && !calculatorOutput.dataset.hasResult) {
@@ -583,6 +599,22 @@
 
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function getCheckoutButtonText() {
+    return state.paymentMethod === "crypto" ? t("checkoutButtonCrypto") : t("checkoutButton");
+  }
+
+  function renderPaymentMethod() {
+    $$("[data-payment-method]").forEach((button) => {
+      button.classList.toggle("active", button.dataset.paymentMethod === state.paymentMethod);
+      button.setAttribute("aria-pressed", String(button.dataset.paymentMethod === state.paymentMethod));
+    });
+
+    const checkoutButton = $("#checkoutButton");
+    if (checkoutButton && !checkoutButton.disabled) {
+      checkoutButton.textContent = getCheckoutButtonText();
+    }
   }
 
   function getCartAmountCents() {
@@ -682,7 +714,7 @@
     state.checkoutInFlight = true;
     showToast(t("culqiProcessing"));
 
-    const response = await fetch(getApiUrl("/api/checkout"), {
+    const response = await fetch(getApiUrl("/api/checkout/card"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -705,6 +737,29 @@
     renderCart();
     closeDrawers();
     showToast(t("paymentSuccess"));
+  }
+
+  async function openCryptoInvoice() {
+    const response = await fetch(getApiUrl("/api/checkout/crypto"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: getCheckoutEmail(),
+        items: getCartLineSummary(),
+      }),
+    });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        data.code === "NOWPAYMENTS_API_KEY_MISSING"
+          ? t("nowpaymentsPlaceholder")
+          : data.error || t("unableStartCheckout"),
+      );
+    }
+
+    if (!data.invoiceUrl) throw new Error(t("cryptoInvoiceMissing"));
+    window.location.href = data.invoiceUrl;
   }
 
   async function handleCulqiAction() {
@@ -938,6 +993,13 @@
       scrollToId("products");
     });
 
+    $$("[data-payment-method]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.paymentMethod = button.dataset.paymentMethod === "crypto" ? "crypto" : "card";
+        renderPaymentMethod();
+      });
+    });
+
     $("#productGrid").addEventListener("click", (event) => {
       const button = event.target.closest(".add-cart");
       if (!button) return;
@@ -970,11 +1032,16 @@
       }
 
       const button = $("#checkoutButton");
-      const originalText = t("checkoutButton");
+      const originalText = getCheckoutButtonText();
       button.disabled = true;
-      button.textContent = t("openingCulqi");
+      button.textContent = state.paymentMethod === "crypto" ? t("openingCrypto") : t("openingCulqi");
 
       try {
+        if (state.paymentMethod === "crypto") {
+          await openCryptoInvoice();
+          return;
+        }
+
         state.culqiCheckout = buildCulqiCheckout(email);
         state.culqiCheckout.open();
       } catch (error) {
@@ -1172,6 +1239,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    state.paymentMethod = CONFIG.DEFAULT_PAYMENT_METHOD === "crypto" ? "crypto" : "card";
     initIcons();
     bindNavigation();
     bindHeader();
