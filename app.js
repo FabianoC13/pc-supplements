@@ -79,7 +79,7 @@
       statLocation: "Ubicacion Peru",
       statPricing: "Precios locales",
       statSupport: "Cola de soporte",
-      analysisTitle: "Analisis Purple Label",
+      analysisTitle: "Analisis de laboratorio",
       analysisCopy:
         "Usa este panel para un metodo analitico destacado, una historia de certificados o una nota de laboratorio peruana.",
       shopNow: "Comprar ahora",
@@ -259,7 +259,7 @@
       statLocation: "Peru location",
       statPricing: "Local pricing",
       statSupport: "Support queue",
-      analysisTitle: "Purple Label Analysis",
+      analysisTitle: "Lab Analysis",
       analysisCopy:
         "Use this panel for a featured analytical method, certificate story, or Peruvian lab note without copying the reference brand.",
       shopNow: "Shop Now",
