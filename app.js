@@ -682,7 +682,7 @@
 
   function getCulqiAppearance() {
     const styles = getComputedStyle(document.documentElement);
-    const accent = styles.getPropertyValue("--accent").trim() || "#7c2d3a";
+    const accent = styles.getPropertyValue("--accent").trim() || "#a0184f";
     const ink = styles.getPropertyValue("--ink").trim() || "#2a2420";
     const paper = styles.getPropertyValue("--paper").trim() || "#faf9f5";
 
