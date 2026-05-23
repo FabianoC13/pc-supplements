@@ -10,11 +10,11 @@
     />
     <link
       rel="icon"
-      href="./logo.svg?v=abstract-mark"
+      href="./logo.svg?v=catalog-layout"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=abstract-mark" />
+    <link rel="stylesheet" href="./styles.css?v=catalog-layout" />
   </head>
   <body>
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=abstract-mark" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=catalog-layout" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -152,14 +152,47 @@
 
       <section class="product-section" id="products" aria-labelledby="productsTitle">
         <div class="container">
-          <div class="section-heading">
-            <h2 id="productsTitle" data-i18n="featuredProductsTitle">Productos destacados</h2>
-            <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo el catalogo</span> <span aria-hidden="true">→</span></button>
+          <div class="catalog-heading">
+            <nav class="catalog-breadcrumb" aria-label="Ruta de catalogo" data-i18n-aria="catalogBreadcrumbAria">
+              <button type="button" data-scroll-target="home" data-i18n="navHome">Inicio</button>
+              <span aria-hidden="true">›</span>
+              <strong data-i18n="navProducts">Todos los productos</strong>
+            </nav>
+            <div class="catalog-heading__main">
+              <div>
+                <h2 id="productsTitle" data-i18n="featuredProductsTitle">Productos destacados</h2>
+                <p class="search-status" id="searchStatus" aria-live="polite"></p>
+              </div>
+              <div class="catalog-actions">
+                <label class="catalog-sort" for="catalogSort">
+                  <span class="sr-only" data-i18n="sortLabel">Ordenar</span>
+                  <select id="catalogSort" aria-label="Ordenar productos" data-i18n-aria="sortLabel">
+                    <option value="featured" data-i18n="sortFeatured">Destacados</option>
+                    <option value="name-asc" data-i18n="sortNameAsc">Nombre A-Z</option>
+                    <option value="category" data-i18n="sortCategory">Categoria</option>
+                  </select>
+                </label>
+                <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo el catalogo</span> <span aria-hidden="true">→</span></button>
+              </div>
+            </div>
           </div>
 
-          <p class="search-status" id="searchStatus" aria-live="polite"></p>
-
-          <div class="product-grid" id="productGrid" aria-label="Product grid"></div>
+          <div class="catalog-layout">
+            <aside class="catalog-sidebar" id="catalogSidebar" aria-label="Filtros de productos" data-i18n-aria="catalogFiltersAria">
+              <div class="catalog-filter-group">
+                <h3 data-i18n="filterCategory">Categoria</h3>
+                <div class="catalog-filter-list" id="categoryFilters"></div>
+              </div>
+              <div class="catalog-filter-group">
+                <h3 data-i18n="filterForm">Formato</h3>
+                <div class="catalog-filter-list" id="formFilters"></div>
+              </div>
+            </aside>
+            <div class="catalog-results">
+              <div class="product-grid" id="productGrid" aria-label="Product grid"></div>
+              <button class="button button--outline load-more" type="button" id="loadMoreProducts" data-i18n="loadMoreProducts">Ver mas productos</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -372,7 +405,7 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=abstract-mark" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=catalog-layout" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
@@ -537,8 +570,8 @@
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://js.culqi.com/checkout-js"></script>
-    <script src="./config.js?v=abstract-mark"></script>
-    <script src="./products.js?v=abstract-mark"></script>
-    <script src="./app.js?v=abstract-mark"></script>
+    <script src="./config.js?v=catalog-layout"></script>
+    <script src="./products.js?v=catalog-layout"></script>
+    <script src="./app.js?v=catalog-layout"></script>
   </body>
 </html>

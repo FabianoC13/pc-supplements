@@ -9,6 +9,10 @@
     selectedCategory: "all",
     catalogMode: "featured",
     searchQuery: "",
+    categoryFilters: [],
+    formFilters: [],
+    sortMode: "featured",
+    visibleProductCount: 12,
     paymentMethod: "card",
     culqiCheckout: null,
     checkoutInFlight: false,
@@ -19,6 +23,7 @@
   const PRODUCT_PRICE = 100;
   const PRODUCT_PRICE_LABEL = "S/ 100.00";
   const PRODUCT_PRICE_CENTS = 10000;
+  const CATALOG_PAGE_SIZE = 12;
   const CONFIG = window.PC_CONFIG || {};
   const CULQI_PUBLIC_KEY_PLACEHOLDER = "pk_test_REPLACE_WITH_CULQI_PUBLIC_KEY";
   const PRODUCTS = Array.isArray(window.PC_PRODUCTS) ? window.PC_PRODUCTS : [];
@@ -56,9 +61,41 @@
       sarms: "SARMs",
     },
     en: {
+      "all-products": "All Products",
+      bioregulators: "Bioregulators",
+      "gh-analogs-and-secretagogues": "GH Analogs and Secretagogues",
       sarms: "SARMs",
       "glp-1": "GLP-1",
+      gonadotropins: "Gonadotropins",
       "monoclonal-antibodies-mabs": "Monoclonal Antibodies",
+      "myostatin-inhibitors": "Myostatin Inhibitors",
+      nasal: "Nasal",
+      nootropics: "Nootropics",
+      "other-products": "Other Products",
+      "pellets-pill": "Pellets (pill)",
+      peptides: "Peptides",
+      powder: "Powder",
+      "research-supplies": "Research Supplies",
+    },
+  };
+  const FORM_LABELS = {
+    es: {
+      injectable: "Inyectable",
+      nasal: "Nasal",
+      pellets: "Pellets",
+      powder: "Polvo",
+      supplies: "Insumos",
+      topical: "Topico",
+      kit: "Kit",
+    },
+    en: {
+      injectable: "Injectable",
+      nasal: "Nasal",
+      pellets: "Pellets",
+      powder: "Powder",
+      supplies: "Supplies",
+      topical: "Topical",
+      kit: "Kit",
     },
   };
 
@@ -110,9 +147,18 @@
       catMethods: "Nootropicos",
       catSupplies: "Insumos de laboratorio",
       featuredProductsTitle: "Productos destacados",
-      productsTitle: "Catalogo completo",
+      productsTitle: "Todos los productos",
       viewAll: "Ver todo el catalogo",
       viewFeatured: "Volver a destacados",
+      catalogBreadcrumbAria: "Ruta de catalogo",
+      catalogFiltersAria: "Filtros de productos",
+      filterCategory: "Categoria",
+      filterForm: "Formato",
+      sortLabel: "Ordenar productos",
+      sortFeatured: "Destacados",
+      sortNameAsc: "Nombre A-Z",
+      sortCategory: "Categoria",
+      loadMoreProducts: "Ver mas productos",
       addCart: "Agregar al carrito",
       processTitle: "Fuente confiable para materiales de investigacion",
       processCopy:
@@ -232,6 +278,8 @@
       removeItemAria: "Quitar articulo",
       productCount: "{count} productos disponibles.",
       featuredProductCount: "{count} productos destacados. Usa Ver todo el catalogo para abrir la lista completa.",
+      catalogShowingCount: "Mostrando {shown} de {total} productos",
+      catalogFilteredCount: "Mostrando {shown} de {total} productos filtrados",
       filteredProductCount: "{count} productos encontrados.",
       searchProductCount: '{count} productos para "{query}".',
       noProductsFound: "No encontramos productos para esa busqueda.",
@@ -314,9 +362,18 @@
       catMethods: "Nootropics",
       catSupplies: "Lab Supplies",
       featuredProductsTitle: "Featured Products",
-      productsTitle: "Full Catalog",
+      productsTitle: "All Products",
       viewAll: "View Full Catalog",
       viewFeatured: "Back to Featured",
+      catalogBreadcrumbAria: "Catalog breadcrumb",
+      catalogFiltersAria: "Product filters",
+      filterCategory: "Category",
+      filterForm: "Form",
+      sortLabel: "Sort products",
+      sortFeatured: "Featured",
+      sortNameAsc: "Name A-Z",
+      sortCategory: "Category",
+      loadMoreProducts: "Load More Products",
       addCart: "Add to Cart",
       processTitle: "Trusted Source for Research Materials",
       processCopy:
@@ -436,6 +493,8 @@
       removeItemAria: "Remove item",
       productCount: "{count} products available.",
       featuredProductCount: "{count} featured products. Use View Full Catalog to open the complete list.",
+      catalogShowingCount: "Showing {shown} of {total} products",
+      catalogFilteredCount: "Showing {shown} of {total} filtered products",
       filteredProductCount: "{count} products found.",
       searchProductCount: '{count} products for "{query}".',
       noProductsFound: "No products matched that search.",
@@ -617,14 +676,67 @@
     return !state.searchQuery && state.selectedCategory === "all" && state.catalogMode === "featured";
   }
 
+  function resetCatalogFilters() {
+    state.categoryFilters = [];
+    state.formFilters = [];
+    state.visibleProductCount = CATALOG_PAGE_SIZE;
+  }
+
   function showAllProducts() {
     state.catalogMode = "all";
     state.selectedCategory = "all";
     state.searchQuery = "";
+    resetCatalogFilters();
     const searchInput = $("#searchInput");
     if (searchInput) searchInput.value = "";
     setActiveCategory("all");
     renderProducts();
+  }
+
+  function getFormLabel(form) {
+    return FORM_LABELS[state.language]?.[form] || FORM_LABELS.en[form] || form;
+  }
+
+  function getProductForm(product) {
+    const name = product.name.toLowerCase();
+    if (product.category === "research-supplies") return "supplies";
+    if (product.category === "nasal" || name.includes("nasal")) return "nasal";
+    if (product.category === "pellets-pill" || name.includes("100x") || name.includes("pellet")) return "pellets";
+    if (product.category === "powder" || name.includes("1g") || name.includes("1gr")) return "powder";
+    if (name.includes("topical")) return "topical";
+    if (name.includes("kit")) return "kit";
+    return "injectable";
+  }
+
+  function getProductVisualType(product) {
+    const name = product.name.toLowerCase();
+    if (name.includes("microscope")) return "microscope";
+    if (product.category === "research-supplies") return "supplies";
+    if (name.includes("topical") || name.includes("ru58841")) return "dropper";
+    if (getProductForm(product) === "powder") return "pouch";
+    if (getProductForm(product) === "pellets") return "bottle";
+    if (getProductForm(product) === "nasal") return "spray";
+    return "vial";
+  }
+
+  function getFilterCounts(getKey) {
+    return PRODUCTS.reduce((counts, product) => {
+      const key = getKey(product);
+      counts.set(key, (counts.get(key) || 0) + 1);
+      return counts;
+    }, new Map());
+  }
+
+  function getSortedCategoryFilters() {
+    return Array.from(getFilterCounts((product) => product.category), ([id, count]) => ({ id, count }))
+      .filter((item) => item.id !== "all-products")
+      .sort((a, b) => b.count - a.count || getCategoryLabel({ category: a.id }).localeCompare(getCategoryLabel({ category: b.id })));
+  }
+
+  function getSortedFormFilters() {
+    return Array.from(getFilterCounts(getProductForm), ([id, count]) => ({ id, count })).sort(
+      (a, b) => b.count - a.count || getFormLabel(a.id).localeCompare(getFormLabel(b.id)),
+    );
   }
 
   function getApiUrl(path) {
@@ -887,44 +999,191 @@
     const sourceProducts = isFeaturedCatalogView()
       ? FEATURED_PRODUCT_IDS.map((id) => PRODUCTS_BY_ID.get(id)).filter(Boolean)
       : PRODUCTS;
+    const categoryFilters =
+      state.categoryFilters.length > 0
+        ? state.categoryFilters
+        : state.catalogMode === "all" && state.selectedCategory !== "all"
+          ? [state.selectedCategory]
+          : [];
 
-    return sourceProducts.filter((product) => {
-      const categoryMatches = state.selectedCategory === "all" || product.category === state.selectedCategory;
+    const filteredProducts = sourceProducts.filter((product) => {
+      const categoryMatches = !categoryFilters.length || categoryFilters.includes(product.category);
       if (!categoryMatches) return false;
+      const formMatches = !state.formFilters.length || state.formFilters.includes(getProductForm(product));
+      if (!formMatches) return false;
       if (!query) return true;
 
       const searchText = normalizeText(
-        [product.name, product.category, product.categoryLabel, getCategoryLabel(product)].join(" "),
+        [product.name, product.category, product.categoryLabel, getCategoryLabel(product), getFormLabel(getProductForm(product))].join(" "),
       );
       return searchText.includes(query);
     });
+
+    if (isFeaturedCatalogView() || state.sortMode === "featured") return filteredProducts;
+
+    return [...filteredProducts].sort((a, b) => {
+      if (state.sortMode === "category") {
+        const categoryComparison = getCategoryLabel(a).localeCompare(getCategoryLabel(b));
+        if (categoryComparison) return categoryComparison;
+      }
+      return a.name.localeCompare(b.name);
+    });
   }
 
-  function updateProductStatus(count) {
+  function updateProductStatus(shownCount, totalCount) {
     const searchStatus = $("#searchStatus");
     if (!searchStatus) return;
-    if (!count) {
+    if (!totalCount) {
       searchStatus.textContent = t("noProductsFound");
       return;
     }
 
-    if (state.searchQuery) {
-      searchStatus.textContent = t("searchProductCount", {
-        count: String(count),
-        query: state.searchQuery,
+    if (isFeaturedCatalogView()) {
+      searchStatus.textContent = t("featuredProductCount", { count: String(totalCount) });
+      return;
+    }
+
+    const hasActiveFilters =
+      Boolean(state.searchQuery) ||
+      state.categoryFilters.length > 0 ||
+      state.formFilters.length > 0 ||
+      state.selectedCategory !== "all";
+
+    if (hasActiveFilters) {
+      searchStatus.textContent = t("catalogFilteredCount", {
+        shown: String(shownCount),
+        total: String(totalCount),
       });
       return;
     }
 
-    if (isFeaturedCatalogView()) {
-      searchStatus.textContent = t("featuredProductCount", { count: String(count) });
-      return;
+    searchStatus.textContent = t("catalogShowingCount", {
+      shown: String(shownCount),
+      total: String(totalCount),
+    });
+  }
+
+  function getBatchNumber(product) {
+    const total = Array.from(product.id).reduce((sum, character) => sum + character.charCodeAt(0), 0);
+    return String((total % 90) + 10).padStart(3, "0");
+  }
+
+  function getProductDisplayName(productName) {
+    return productName
+      .replace(/\bvial\b/gi, "")
+      .replace(/\bflacon\b/gi, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function renderProductVisual(product) {
+    const visualType = getProductVisualType(product);
+    const labelName = escapeHtml(getProductDisplayName(product.name));
+    const batch = escapeHtml(getBatchNumber(product));
+    const label = `
+      <span class="lab-label">
+        <img src="./logo.svg?v=catalog-layout" alt="" />
+        <strong>${labelName}</strong>
+        <small>Batch No.${batch}</small>
+      </span>
+    `;
+
+    if (visualType === "microscope") {
+      return `
+        <span class="product-art product-art--microscope">
+          <span class="scope-head"></span>
+          <span class="scope-arm"></span>
+          <span class="scope-stage"></span>
+          <span class="scope-base"></span>
+        </span>
+      `;
     }
 
-    searchStatus.textContent =
-      state.selectedCategory === "all"
-        ? t("productCount", { count: String(count) })
-        : t("filteredProductCount", { count: String(count) });
+    if (visualType === "pouch") {
+      return `
+        <span class="product-art product-art--pouch">
+          <span class="pouch-seal"></span>
+          ${label}
+        </span>
+      `;
+    }
+
+    if (visualType === "dropper") {
+      return `
+        <span class="product-art product-art--dropper">
+          <span class="dropper-top"></span>
+          <span class="dropper-glass">${label}<span class="liquid"></span></span>
+        </span>
+      `;
+    }
+
+    if (visualType === "bottle") {
+      return `
+        <span class="product-art product-art--bottle">
+          <span class="bottle-cap"></span>
+          <span class="bottle-body">${label}</span>
+        </span>
+      `;
+    }
+
+    if (visualType === "spray") {
+      return `
+        <span class="product-art product-art--spray">
+          <span class="spray-cap"></span>
+          <span class="spray-body">${label}</span>
+        </span>
+      `;
+    }
+
+    if (visualType === "supplies") {
+      return `
+        <span class="product-art product-art--supplies">
+          <span class="supply-box">${label}</span>
+          <span class="supply-tube"></span>
+          <span class="supply-tube supply-tube--small"></span>
+        </span>
+      `;
+    }
+
+    return `
+      <span class="product-art product-art--vial">
+        <span class="vial-cap"></span>
+        <span class="vial-neck"></span>
+        <span class="vial-glass">${label}<span class="powder-bed"></span></span>
+      </span>
+    `;
+  }
+
+  function renderFilterControls() {
+    const categoryFilters = $("#categoryFilters");
+    const formFilters = $("#formFilters");
+    if (!categoryFilters || !formFilters) return;
+
+    categoryFilters.innerHTML = getSortedCategoryFilters()
+      .map(({ id, count }) => {
+        const checked = state.categoryFilters.includes(id) ? "checked" : "";
+        return `
+          <label class="catalog-filter">
+            <input type="checkbox" data-filter-type="category" value="${escapeHtml(id)}" ${checked} />
+            <span>${escapeHtml(getCategoryLabel({ category: id }))}</span>
+            <small>(${count})</small>
+          </label>
+        `;
+      })
+      .join("");
+
+    formFilters.innerHTML = getSortedFormFilters()
+      .map(({ id, count }) => {
+        const checked = state.formFilters.includes(id) ? "checked" : "";
+        return `
+          <label class="catalog-filter">
+            <input type="checkbox" data-filter-type="form" value="${escapeHtml(id)}" ${checked} />
+            <span>${escapeHtml(getFormLabel(id))}</span>
+            <small>(${count})</small>
+          </label>
+        `;
+      })
+      .join("");
   }
 
   function renderProducts() {
@@ -932,40 +1191,62 @@
     if (!grid) return;
 
     const products = getFilteredProducts();
+    const isFeatured = isFeaturedCatalogView();
+    const visibleProducts = isFeatured ? products : products.slice(0, state.visibleProductCount);
+    const productSection = $("#products");
+    if (productSection) {
+      productSection.classList.toggle("catalog-mode", !isFeatured);
+      productSection.classList.toggle("featured-mode", isFeatured);
+    }
     const productsTitle = $("#productsTitle");
-    const viewAllButton = $("[data-view-all] span");
+    const viewAllButton = $("[data-view-all]");
+    const viewAllButtonText = $("[data-view-all] span");
+    const sortSelect = $("#catalogSort");
+    const loadMoreButton = $("#loadMoreProducts");
     if (productsTitle) {
-      productsTitle.textContent = isFeaturedCatalogView() ? t("featuredProductsTitle") : t("productsTitle");
+      productsTitle.textContent = isFeatured ? t("featuredProductsTitle") : t("productsTitle");
+    }
+    if (viewAllButtonText) {
+      viewAllButtonText.textContent = isFeatured ? t("viewAll") : t("viewFeatured");
     }
     if (viewAllButton) {
-      viewAllButton.textContent = isFeaturedCatalogView() ? t("viewAll") : t("viewFeatured");
+      viewAllButton.hidden = !isFeatured;
     }
-    updateProductStatus(products.length);
+    if (sortSelect) {
+      sortSelect.value = state.sortMode;
+    }
+    renderFilterControls();
+    updateProductStatus(visibleProducts.length, products.length);
 
     if (!products.length) {
       grid.innerHTML = `<div class="product-empty" role="status">${t("noProductsFound")}</div>`;
+      if (loadMoreButton) loadMoreButton.hidden = true;
       return;
     }
 
-    grid.innerHTML = products
+    grid.innerHTML = visibleProducts
       .map((product) => {
         const productName = escapeHtml(product.name);
         const productLabel = escapeHtml(getCategoryLabel(product));
         return `
           <article class="product-card" data-product-card data-category="${escapeHtml(product.category)}">
-            <a class="product-card__visual" href="#products" aria-label="${escapeHtml(t("productDetailAria", { name: product.name }))}">
-              <span class="product-card__monogram">${escapeHtml(getProductCode(product.name))}</span>
+            <a class="product-card__visual product-card__visual--${escapeHtml(getProductVisualType(product))}" href="#products" aria-label="${escapeHtml(t("productDetailAria", { name: product.name }))}">
+              ${renderProductVisual(product)}
             </a>
             <div class="product-card__body">
               <span class="product-card__category">${productLabel}</span>
               <a class="product-card__title" href="#products">${productName}</a>
               <span class="product-price">${PRODUCT_PRICE_LABEL}</span>
-              <button class="button button--dark add-cart" type="button" data-product-id="${escapeHtml(product.id)}">${t("addCart")}</button>
+              <button class="button button--dark add-cart" type="button" data-product-id="${escapeHtml(product.id)}"><i data-lucide="shopping-cart" aria-hidden="true"></i><span>${t("addCart")}</span></button>
             </div>
           </article>
         `;
       })
       .join("");
+    if (loadMoreButton) {
+      loadMoreButton.hidden = isFeatured || visibleProducts.length >= products.length;
+    }
+    initIcons();
   }
 
   function setActiveCategory(category) {
@@ -1038,6 +1319,9 @@
     $$(".category-card").forEach((card) => {
       card.addEventListener("click", () => {
         state.catalogMode = "all";
+        state.categoryFilters = [card.dataset.category];
+        state.formFilters = [];
+        state.visibleProductCount = CATALOG_PAGE_SIZE;
         filterProducts(card.dataset.category);
         scrollToId("products");
       });
@@ -1050,12 +1334,41 @@
         state.catalogMode = "featured";
         state.selectedCategory = "all";
         state.searchQuery = "";
+        resetCatalogFilters();
         const searchInput = $("#searchInput");
         if (searchInput) searchInput.value = "";
         setActiveCategory("all");
         renderProducts();
       }
       scrollToId("products");
+    });
+
+    $("#catalogSidebar").addEventListener("change", (event) => {
+      const input = event.target.closest("input[data-filter-type]");
+      if (!input) return;
+      const selector = `input[data-filter-type="${input.dataset.filterType}"]:checked`;
+      const values = $$(selector, $("#catalogSidebar")).map((checkbox) => checkbox.value);
+      if (input.dataset.filterType === "category") {
+        state.categoryFilters = values;
+        state.selectedCategory = "all";
+        setActiveCategory("all");
+      } else {
+        state.formFilters = values;
+      }
+      state.catalogMode = "all";
+      state.visibleProductCount = CATALOG_PAGE_SIZE;
+      renderProducts();
+    });
+
+    $("#catalogSort").addEventListener("change", (event) => {
+      state.sortMode = event.target.value;
+      state.visibleProductCount = CATALOG_PAGE_SIZE;
+      renderProducts();
+    });
+
+    $("#loadMoreProducts").addEventListener("click", () => {
+      state.visibleProductCount += CATALOG_PAGE_SIZE;
+      renderProducts();
     });
 
     $$("[data-payment-method]").forEach((button) => {
@@ -1121,8 +1434,11 @@
   function bindSearch() {
     $("#searchInput").addEventListener("input", (event) => {
       state.searchQuery = event.target.value.trim();
-      if (state.searchQuery) state.catalogMode = "all";
-      if (state.searchQuery) setActiveCategory("all");
+      if (state.searchQuery) {
+        state.catalogMode = "all";
+        resetCatalogFilters();
+        setActiveCategory("all");
+      }
       renderProducts();
     });
 
@@ -1130,8 +1446,11 @@
       event.preventDefault();
       const query = $("#searchInput").value.trim();
       state.searchQuery = query;
-      if (state.searchQuery) state.catalogMode = "all";
-      if (state.searchQuery) setActiveCategory("all");
+      if (state.searchQuery) {
+        state.catalogMode = "all";
+        resetCatalogFilters();
+        setActiveCategory("all");
+      }
       renderProducts();
       if (query) showToast(t("searchReady", { query }));
       scrollToId("products");
