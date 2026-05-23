@@ -8,16 +8,16 @@
       name="description"
       content="Catalogo completo de productos de investigacion de P&C Supplements en Peru."
     />
-    <link rel="icon" href="./logo.svg?v=catalog-page" type="image/svg+xml" />
+    <link rel="icon" href="./logo.svg?v=section-pages" type="image/svg+xml" />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=catalog-page" />
+    <link rel="stylesheet" href="./styles.css?v=section-pages" />
   </head>
-  <body data-page="products">
+  <body data-page="products" data-page-title-key="productsMetaTitle" data-page-description-key="productsMetaDescription">
     <header class="site-header">
       <div class="header-main">
         <a class="brand" href="./index.html" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=catalog-page" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=section-pages" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -61,12 +61,13 @@
       </div>
 
       <nav class="site-nav" aria-label="Navegacion principal" data-i18n-aria="mainNavAria">
-        <a class="nav-link" href="./index.html" data-i18n="navHome">Inicio</a>
-        <a class="nav-link active" href="./products.html?v=catalog-page" target="_blank" rel="noopener" data-i18n="navProducts">Todos los productos</a>
-        <a class="nav-link" href="./index.html#about" data-i18n="navAbout">Nosotros</a>
-        <a class="nav-link" href="./index.html#test-results" data-i18n="navCertificates">Certificados de calidad</a>
-        <a class="nav-link" href="./index.html#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
-        <a class="nav-link" href="./index.html#contact" data-i18n="navContact">Contacto</a>
+        <a class="nav-link" href="./index.html" data-nav-section="home" data-i18n="navHome">Inicio</a>
+        <a class="nav-link active" href="./products.html?v=section-pages" target="_blank" rel="noopener" data-nav-section="products" data-i18n="navProducts">Todos los productos</a>
+        <a class="nav-link" href="./about.html?v=section-pages" data-nav-section="about" data-i18n="navAbout">Nosotros</a>
+        <a class="nav-link" href="./index.html#test-results" data-nav-section="test-results" data-i18n="navCertificates">Certificados de calidad</a>
+        <a class="nav-link" href="./calculator.html?v=section-pages" data-nav-section="calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
+        <a class="nav-link" href="./b2b.html?v=section-pages" data-nav-section="b2b">B2B</a>
+        <a class="nav-link" href="./contact.html?v=section-pages" data-nav-section="contact" data-i18n="navContact">Contacto</a>
       </nav>
     </header>
 
@@ -127,10 +128,12 @@
         </div>
         <nav>
           <a href="./index.html" data-i18n="navHome">Inicio</a>
-          <a href="./products.html?v=catalog-page" target="_blank" rel="noopener" data-i18n="navProducts">Todos los productos</a>
-          <a href="./index.html#about" data-i18n="navAbout">Nosotros</a>
+          <a href="./products.html?v=section-pages" target="_blank" rel="noopener" data-i18n="navProducts">Todos los productos</a>
+          <a href="./about.html?v=section-pages" data-i18n="navAbout">Nosotros</a>
           <a href="./index.html#test-results" data-i18n="navCertificates">Certificados de calidad</a>
-          <a href="./index.html#contact" data-i18n="navContact">Contacto</a>
+          <a href="./calculator.html?v=section-pages" data-i18n="navCalculator">Calculadora de laboratorio</a>
+          <a href="./b2b.html?v=section-pages">B2B</a>
+          <a href="./contact.html?v=section-pages" data-i18n="navContact">Contacto</a>
         </nav>
       </div>
     </aside>
@@ -183,8 +186,8 @@
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://js.culqi.com/checkout-js"></script>
-    <script src="./config.js?v=catalog-page"></script>
-    <script src="./products.js?v=catalog-page"></script>
-    <script src="./app.js?v=catalog-page"></script>
+    <script src="./config.js?v=section-pages"></script>
+    <script src="./products.js?v=section-pages"></script>
+    <script src="./app.js?v=section-pages"></script>
   </body>
 </html>

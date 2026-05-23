@@ -104,6 +104,16 @@
       pageTitle: "P&C Supplements | Laboratorio Cientifico Peru",
       pageDescription:
         "P&C Supplements es una tienda cientifica de laboratorio en Peru con catalogo de productos y precios en soles.",
+      aboutMetaTitle: "P&C Supplements | Nosotros",
+      aboutMetaDescription: "Conoce la operacion cientifica de P&C Supplements para Peru.",
+      productsMetaTitle: "P&C Supplements | Todos los productos",
+      productsMetaDescription: "Catalogo completo de productos de investigacion de P&C Supplements en Peru.",
+      calculatorMetaTitle: "P&C Supplements | Calculadora de laboratorio",
+      calculatorMetaDescription: "Calculadora de concentracion para flujos de laboratorio de P&C Supplements.",
+      contactMetaTitle: "P&C Supplements | Contacto",
+      contactMetaDescription: "Contacta a P&C Supplements para soporte, entregas y pedidos en Peru.",
+      b2bMetaTitle: "P&C Supplements | B2B",
+      b2bMetaDescription: "Consultas B2B, volumen y socios comerciales de P&C Supplements.",
       topStripAria: "Datos de servicio",
       topPeru: "Laboratorio cientifico en Peru.",
       topSoles: "Precios en soles peruanos.",
@@ -305,6 +315,7 @@
       unitsPerVolume: "{value} unidades por volumen.",
       accountToast: "Flujo de cuenta abierto",
       messageSent: "Mensaje enviado",
+      inquirySent: "Consulta enviada",
       qualityToast: "Panel de certificados de calidad abierto",
       communityToast: "Accion de comunidad abierta",
       privacyToast: "Panel de privacidad abierto",
@@ -319,6 +330,16 @@
       pageTitle: "P&C Supplements | Scientific Lab Peru",
       pageDescription:
         "P&C Supplements scientific lab storefront for Peru with a product catalog and local sol pricing.",
+      aboutMetaTitle: "P&C Supplements | About Us",
+      aboutMetaDescription: "Learn about the scientific operation behind P&C Supplements in Peru.",
+      productsMetaTitle: "P&C Supplements | All Products",
+      productsMetaDescription: "Complete P&C Supplements research product catalog for Peru.",
+      calculatorMetaTitle: "P&C Supplements | Lab Calculator",
+      calculatorMetaDescription: "Concentration calculator for P&C Supplements laboratory workflows.",
+      contactMetaTitle: "P&C Supplements | Contact",
+      contactMetaDescription: "Contact P&C Supplements for support, delivery, and Peru orders.",
+      b2bMetaTitle: "P&C Supplements | B2B",
+      b2bMetaDescription: "B2B, volume purchasing, and commercial partner inquiries for P&C Supplements.",
       topStripAria: "Service highlights",
       topPeru: "Peru-based scientific lab.",
       topSoles: "Prices in Peruvian soles.",
@@ -520,6 +541,7 @@
       unitsPerVolume: "{value} units per volume.",
       accountToast: "Account flow opened",
       messageSent: "Message sent",
+      inquirySent: "Inquiry sent",
       qualityToast: "Quality certificate panel opened",
       communityToast: "Community action opened",
       privacyToast: "Privacy panel opened",
@@ -585,9 +607,9 @@
 
   function applyLanguage() {
     document.documentElement.lang = state.language === "es" ? "es-PE" : "en";
-    document.title = t("pageTitle");
+    document.title = t(document.body.dataset.pageTitleKey || "pageTitle");
     const description = $('meta[name="description"]');
-    if (description) description.setAttribute("content", t("pageDescription"));
+    if (description) description.setAttribute("content", t(document.body.dataset.pageDescriptionKey || "pageDescription"));
 
     $$("[data-i18n]").forEach((element) => {
       element.textContent = t(element.dataset.i18n);
@@ -946,7 +968,8 @@
 
   function updateActiveNav(id) {
     $$(".nav-link").forEach((link) => {
-      link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+      const navSection = link.dataset.navSection;
+      link.classList.toggle("active", navSection ? navSection === id : link.getAttribute("href") === `#${id}`);
     });
   }
 
@@ -1088,7 +1111,7 @@
     const batch = escapeHtml(getBatchNumber(product));
     const label = `
       <span class="lab-label">
-        <img src="./logo.svg?v=catalog-page" alt="" />
+        <img src="./logo.svg?v=section-pages" alt="" />
         <strong>${labelName}</strong>
         <small>Batch No.${batch}</small>
       </span>
@@ -1452,7 +1475,11 @@
 
     $("#searchForm")?.addEventListener("submit", (event) => {
       event.preventDefault();
-      const query = $("#searchInput").value.trim();
+      const query = $("#searchInput")?.value.trim() || "";
+      if (!$("#productGrid")) {
+        if (query) window.location.href = `./products.html?v=section-pages&q=${encodeURIComponent(query)}`;
+        return;
+      }
       state.searchQuery = query;
       if (state.searchQuery) {
         state.catalogMode = "all";
@@ -1517,8 +1544,27 @@
       if ($("#contactModal").returnValue === "send") showToast(t("messageSent"));
     });
 
+    $("#contactPageForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.currentTarget.reset();
+      showToast(t("messageSent"));
+    });
+
+    $("#b2bForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.currentTarget.reset();
+      showToast(t("inquirySent"));
+    });
+
     $$("[data-open-contact]").forEach((button) => {
-      button.addEventListener("click", () => openDialog($("#contactModal")));
+      button.addEventListener("click", () => {
+        const contactModal = $("#contactModal");
+        if (contactModal) {
+          openDialog(contactModal);
+          return;
+        }
+        window.location.href = "./contact.html?v=section-pages";
+      });
     });
 
     $("[data-open-results]")?.addEventListener("click", () => {
@@ -1638,6 +1684,13 @@
     if (document.body.dataset.page === "products") {
       state.catalogMode = "all";
       state.visibleProductCount = CATALOG_PAGE_SIZE;
+    }
+    const initialQuery = new URLSearchParams(window.location.search).get("q");
+    if (initialQuery && $("#productGrid")) {
+      state.catalogMode = "all";
+      state.searchQuery = initialQuery;
+      const searchInput = $("#searchInput");
+      if (searchInput) searchInput.value = initialQuery;
     }
     state.paymentMethod = CONFIG.DEFAULT_PAYMENT_METHOD === "crypto" ? "crypto" : "card";
     initIcons();
