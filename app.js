@@ -7,6 +7,7 @@
     language: "es",
     reviewIndex: 0,
     selectedCategory: "all",
+    catalogMode: "featured",
     searchQuery: "",
     paymentMethod: "card",
     culqiCheckout: null,
@@ -22,6 +23,20 @@
   const CULQI_PUBLIC_KEY_PLACEHOLDER = "pk_test_REPLACE_WITH_CULQI_PUBLIC_KEY";
   const PRODUCTS = Array.isArray(window.PC_PRODUCTS) ? window.PC_PRODUCTS : [];
   const PRODUCTS_BY_ID = new Map(PRODUCTS.map((product) => [product.id, product]));
+  const FEATURED_PRODUCT_IDS = [
+    "retratrutide-5mg-vial",
+    "bac-water-10ml-vial",
+    "bpc157-10mg-vial",
+    "ghk-cu-50mg-vial",
+    "mots-c-10mg-vial",
+    "cagrilintide-10mg",
+    "tb500-10mg-vial",
+    "nad-500mg-vial",
+    "epitalon-10mg-vial",
+    "cjc-1295-with-dac-10mg-vial",
+    "selank-10mg-vial",
+    "kpv-10mg-vial",
+  ];
   const CATEGORY_LABELS = {
     es: {
       "all-products": "Todos",
@@ -69,63 +84,67 @@
       openMenuAria: "Abrir menu",
       mainNavAria: "Navegacion principal",
       navHome: "Inicio",
-      navProducts: "Todos los suplementos",
+      navProducts: "Todos los productos",
       navAbout: "Nosotros",
       navCertificates: "Certificados de calidad",
       navCalculator: "Calculadora de laboratorio",
       navCommunity: "Comunidad",
       navContact: "Contacto",
       primaryAria: "Principal",
-      heroEyebrow: "Lima, Peru · Laboratorio cientifico de suplementos",
+      heroEyebrow: "Lima, Peru · Peptidos e insumos de investigacion",
       heroCopy:
-        "Un catalogo de enfoque cientifico para Peru, con presentacion de laboratorio, fichas listas para certificados y pago en soles.",
-      heroBrowse: "Ver suplementos",
+        "Materiales de investigacion con presentacion clinica, trazabilidad por lote y checkout local en soles para Peru.",
+      heroBrowse: "Explorar productos",
       heroCertificates: "Ver certificados de calidad",
       trustSignalsAria: "Senales de confianza",
-      featureDelivery: "Entrega en Peru",
-      featureLab: "Revision de laboratorio",
-      featureRecords: "Registros de calidad",
-      featureSupport: "Soporte cientifico",
-      categoryTitle: "Comprar por categoria",
-      catMicroscopy: "Todos",
-      catAnalytes: "Bioreguladores",
+      featureDelivery: "Envio a todo el Peru",
+      featureLab: "Formulas con respaldo cientifico",
+      featureRecords: "Transparencia por lote",
+      featureSupport: "Soporte 24/7",
+      categoryTitle: "Colecciones principales",
+      categoryCopy: "El inicio muestra solo colecciones y productos destacados; el catalogo completo queda separado.",
+      catMicroscopy: "Peptidos",
+      catAnalytes: "GH analogos",
       catFormulas: "GLP-1",
-      catCompounds: "SARMs",
+      catCompounds: "Inhibidores de miostatina",
       catMethods: "Nootropicos",
       catSupplies: "Insumos de laboratorio",
-      productsTitle: "Catalogo de productos",
-      viewAll: "Ver todo",
+      featuredProductsTitle: "Productos destacados",
+      productsTitle: "Catalogo completo",
+      viewAll: "Ver todo el catalogo",
+      viewFeatured: "Volver a destacados",
       addCart: "Agregar al carrito",
-      processTitle: "Construido para revision cientifica",
+      processTitle: "Fuente confiable para materiales de investigacion",
       processCopy:
-        "Un layout cientifico para suplementos, con espacio para notas de origen, registros analiticos, metodos y documentacion de calidad.",
-      processPoint1: "Precios y entrega pensados para Peru",
-      processPoint2: "Catalogo listo para fichas y fotos de laboratorio",
-      processPoint3: "Espacio para microscopia y certificados por lote",
-      learnMore: "Conocer mas",
+        "P&C Supplements esta estructurada para laboratorios, investigadores y compradores profesionales que necesitan presentacion clara, documentacion y manejo responsable.",
+      processPoint1: "Productos organizados para uso de investigacion y laboratorio",
+      processPoint2: "Espacio para certificados, reportes y datos por lote",
+      processPoint3: "Operacion local pensada para Peru, con pago en soles",
+      learnMore: "Ver estandares",
       labImageAlt: "Cientifico trabajando con microscopio de laboratorio",
-      blankTitleAria: "Titulo de seccion en blanco",
+      qualityTitle: "Peptidos de investigacion de alta calidad",
+      blankTitleAria: "Titulo de calidad",
       qualityCopy:
-        "Aqui puede ir un bloque breve de credibilidad de marca, con espacio para el texto final de lanzamiento.",
+        "El posicionamiento de marca queda centrado en pureza, consistencia y documentacion. Los textos finales de claims, fabricantes y lotes se pueden completar cuando existan certificados reales.",
       moreAbout: "Mas sobre nosotros",
       statsAria: "Estadisticas de calidad",
       statLocation: "Ubicacion Peru",
       statPricing: "Precios locales",
       statSupport: "Cola de soporte",
-      analysisTitle: "Analisis de laboratorio",
+      analysisTitle: "Pureza 99%+ documentada",
       analysisCopy:
-        "Usa este panel para un metodo analitico destacado, una historia de certificados o una nota de laboratorio peruana.",
+        "Un bloque destacado para explicar HPLC, MS, certificados de analisis y controles por lote cuando la documentacion final este lista.",
       shopNow: "Comprar ahora",
-      trustTitle: "Por que los clientes confian en nosotros",
-      trustCopy: "Tarjetas de confianza para compra cientifica de suplementos en Peru.",
-      trustPricingTitle: "Precios locales",
-      trustPricingCopy: "Cada producto esta en S/ 100.00 para una grilla limpia.",
-      trustQualityTitle: "Calidad primero",
-      trustQualityCopy: "Estructurado para notas analiticas, certificados y soporte.",
-      trustCertificateTitle: "Listo para certificados",
-      trustCertificateCopy: "Incluye espacio dedicado para certificados de calidad.",
-      trustSupportTitle: "Soporte",
-      trustSupportCopy: "Cuenta y contacto permanecen disponibles en toda la tienda.",
+      trustTitle: "Transparencia y profesionalismo",
+      trustCopy: "El home resume la promesa de servicio antes de enviar al catalogo completo.",
+      trustPricingTitle: "Envio nacional",
+      trustPricingCopy: "La tienda esta preparada para cobertura Peru y precios en PEN.",
+      trustQualityTitle: "Base cientifica",
+      trustQualityCopy: "Mensajes centrados en investigacion, laboratorio y trazabilidad.",
+      trustCertificateTitle: "Documentacion clara",
+      trustCertificateCopy: "Espacios listos para certificados, fechas, lotes y metodos.",
+      trustSupportTitle: "Atencion continua",
+      trustSupportCopy: "Acciones de cuenta, contacto y carrito disponibles en toda la tienda.",
       qualityInfoTitle: "Informacion de calidad y etiqueta",
       qualityInfoCopy:
         "Usa esta area para notas analiticas, certificados, detalles de importacion, condiciones de entrega y cumplimiento en Peru.",
@@ -198,7 +217,7 @@
       noticeTitle: "Aviso importante — Tienda de suplementos",
       noticeSub: "Lee antes de entrar a este sitio.",
       noticeCopy:
-        "Esta tienda es un layout cientifico de suplementos e integracion de pago con Culqi para Peru. Las etiquetas, afirmaciones analiticas, ingredientes y reglas de compra finales deben revisarse antes del lanzamiento.",
+        "Esta tienda es un layout cientifico de suplementos e integracion de pagos con tarjeta y cripto para Peru. Las etiquetas, afirmaciones analiticas, ingredientes y reglas de compra finales deben revisarse antes del lanzamiento.",
       noticePoint1: "Tienes al menos 18 anos.",
       noticePoint2: "Revisaras las etiquetas antes de comprar.",
       noticePoint3: "Aceptas responsabilidad por cumplimiento local y decisiones de uso.",
@@ -212,6 +231,7 @@
       cartProductNameAria: "Nombre de producto",
       removeItemAria: "Quitar articulo",
       productCount: "{count} productos disponibles.",
+      featuredProductCount: "{count} productos destacados. Usa Ver todo el catalogo para abrir la lista completa.",
       filteredProductCount: "{count} productos encontrados.",
       searchProductCount: '{count} productos para "{query}".',
       noProductsFound: "No encontramos productos para esa busqueda.",
@@ -268,63 +288,67 @@
       openMenuAria: "Open menu",
       mainNavAria: "Main navigation",
       navHome: "Home",
-      navProducts: "All Supplements",
+      navProducts: "All Products",
       navAbout: "About Us",
       navCertificates: "Quality Certificates",
       navCalculator: "Lab Calculator",
       navCommunity: "Community",
       navContact: "Contact",
       primaryAria: "Primary",
-      heroEyebrow: "Lima, Peru · Scientific supplement lab",
+      heroEyebrow: "Lima, Peru · Research peptides and lab supplies",
       heroCopy:
-        "A lab-forward catalog for Peru with scientific presentation, certificate-ready product cards, and local sol checkout.",
-      heroBrowse: "Browse Supplements",
+        "Research materials with clinical presentation, batch traceability, and local sol checkout for Peru.",
+      heroBrowse: "Explore Products",
       heroCertificates: "View Quality Certificates",
       trustSignalsAria: "Trust signals",
-      featureDelivery: "Peru Delivery",
-      featureLab: "Lab Reviewed",
-      featureRecords: "Quality Records",
-      featureSupport: "Scientific Support",
-      categoryTitle: "Shop by Category",
-      catMicroscopy: "All",
-      catAnalytes: "Bioregulators",
+      featureDelivery: "Peru-wide shipping",
+      featureLab: "Science-backed formulas",
+      featureRecords: "Batch transparency",
+      featureSupport: "24/7 Support",
+      categoryTitle: "Main Collections",
+      categoryCopy: "The landing page shows curated collections and featured products; the full catalog stays separate.",
+      catMicroscopy: "Peptides",
+      catAnalytes: "GH Analogs",
       catFormulas: "GLP-1",
-      catCompounds: "SARMs",
+      catCompounds: "Myostatin Inhibitors",
       catMethods: "Nootropics",
       catSupplies: "Lab Supplies",
-      productsTitle: "Product Catalog",
-      viewAll: "View All",
+      featuredProductsTitle: "Featured Products",
+      productsTitle: "Full Catalog",
+      viewAll: "View Full Catalog",
+      viewFeatured: "Back to Featured",
       addCart: "Add to Cart",
-      processTitle: "Built for Scientific Review",
+      processTitle: "Trusted Source for Research Materials",
       processCopy:
-        "A scientific supplement layout with room for sourcing notes, analytical records, method details, and quality documentation.",
-      processPoint1: "Peru-first pricing and delivery language",
-      processPoint2: "Catalog ready for lab photos and product files",
-      processPoint3: "Microscope and certificate placement for every batch",
-      learnMore: "Learn More About Us",
+        "P&C Supplements is structured for laboratories, researchers, and professional buyers who need clear presentation, documentation, and responsible handling.",
+      processPoint1: "Products organized for research and laboratory use",
+      processPoint2: "Room for certificates, reports, and batch data",
+      processPoint3: "Peru-first operation with checkout in soles",
+      learnMore: "View Standards",
       labImageAlt: "Scientist working with laboratory microscope",
-      blankTitleAria: "Blank section title",
+      qualityTitle: "High-Quality Research Peptides",
+      blankTitleAria: "Quality heading",
       qualityCopy:
-        "A short brand credibility block can sit here, with room for final launch copy while keeping the page distinct.",
+        "Brand positioning stays centered on purity, consistency, and documentation. Final claim, manufacturer, and batch language can be completed when real certificates are available.",
       moreAbout: "More about us",
       statsAria: "Quality statistics",
       statLocation: "Peru location",
       statPricing: "Local pricing",
       statSupport: "Support queue",
-      analysisTitle: "Lab Analysis",
+      analysisTitle: "Documented 99%+ Purity",
       analysisCopy:
-        "Use this panel for a featured analytical method, certificate story, or Peruvian lab note without copying the reference brand.",
+        "A featured block for HPLC, MS, certificates of analysis, and batch controls once final documentation is ready.",
       shopNow: "Shop Now",
-      trustTitle: "Why Customers Trust Us",
-      trustCopy: "Compact trust cards for scientific supplement shopping in Peru.",
-      trustPricingTitle: "Local Pricing",
-      trustPricingCopy: "Every product is set to S/ 100.00 for a clean launch grid.",
-      trustQualityTitle: "Quality First",
-      trustQualityCopy: "Structured for analytical notes, certificates, and support context.",
-      trustCertificateTitle: "Certificate Ready",
-      trustCertificateCopy: "Dedicated quality-certificate placement is included.",
-      trustSupportTitle: "Support",
-      trustSupportCopy: "Account and contact actions stay available across the storefront.",
+      trustTitle: "Transparency & Professionalism",
+      trustCopy: "The homepage summarizes the service promise before opening the full catalog.",
+      trustPricingTitle: "National Shipping",
+      trustPricingCopy: "The storefront is prepared for Peru coverage and PEN pricing.",
+      trustQualityTitle: "Scientific Foundation",
+      trustQualityCopy: "Messaging stays focused on research, laboratory use, and traceability.",
+      trustCertificateTitle: "Clear Documentation",
+      trustCertificateCopy: "Spaces are ready for certificates, dates, batches, and methods.",
+      trustSupportTitle: "Always-on Support",
+      trustSupportCopy: "Account, contact, and cart actions stay available across the store.",
       qualityInfoTitle: "Quality & Label Information",
       qualityInfoCopy:
         "Use this area for analytical notes, certificates, import details, local delivery conditions, and compliance copy for Peru.",
@@ -397,7 +421,7 @@
       noticeTitle: "Important Notice — Supplement Store",
       noticeSub: "Please read before entering this website.",
       noticeCopy:
-        "This storefront is a scientific supplement layout and Culqi checkout integration for Peru. Final labels, analytical claims, ingredients, and purchasing rules should be reviewed before launch.",
+        "This storefront is a scientific supplement layout with card and crypto checkout integration for Peru. Final labels, analytical claims, ingredients, and purchasing rules should be reviewed before launch.",
       noticePoint1: "You are at least 18 years of age.",
       noticePoint2: "You will review product labels before purchasing.",
       noticePoint3: "You accept responsibility for local compliance and usage decisions.",
@@ -411,6 +435,7 @@
       cartProductNameAria: "Product name",
       removeItemAria: "Remove item",
       productCount: "{count} products available.",
+      featuredProductCount: "{count} featured products. Use View Full Catalog to open the complete list.",
       filteredProductCount: "{count} products found.",
       searchProductCount: '{count} products for "{query}".',
       noProductsFound: "No products matched that search.",
@@ -586,6 +611,20 @@
       .join("")
       .toUpperCase()
       .padEnd(2, "P");
+  }
+
+  function isFeaturedCatalogView() {
+    return !state.searchQuery && state.selectedCategory === "all" && state.catalogMode === "featured";
+  }
+
+  function showAllProducts() {
+    state.catalogMode = "all";
+    state.selectedCategory = "all";
+    state.searchQuery = "";
+    const searchInput = $("#searchInput");
+    if (searchInput) searchInput.value = "";
+    setActiveCategory("all");
+    renderProducts();
   }
 
   function getApiUrl(path) {
@@ -845,7 +884,11 @@
 
   function getFilteredProducts() {
     const query = normalizeText(state.searchQuery);
-    return PRODUCTS.filter((product) => {
+    const sourceProducts = isFeaturedCatalogView()
+      ? FEATURED_PRODUCT_IDS.map((id) => PRODUCTS_BY_ID.get(id)).filter(Boolean)
+      : PRODUCTS;
+
+    return sourceProducts.filter((product) => {
       const categoryMatches = state.selectedCategory === "all" || product.category === state.selectedCategory;
       if (!categoryMatches) return false;
       if (!query) return true;
@@ -873,6 +916,11 @@
       return;
     }
 
+    if (isFeaturedCatalogView()) {
+      searchStatus.textContent = t("featuredProductCount", { count: String(count) });
+      return;
+    }
+
     searchStatus.textContent =
       state.selectedCategory === "all"
         ? t("productCount", { count: String(count) })
@@ -884,6 +932,14 @@
     if (!grid) return;
 
     const products = getFilteredProducts();
+    const productsTitle = $("#productsTitle");
+    const viewAllButton = $("[data-view-all] span");
+    if (productsTitle) {
+      productsTitle.textContent = isFeaturedCatalogView() ? t("featuredProductsTitle") : t("productsTitle");
+    }
+    if (viewAllButton) {
+      viewAllButton.textContent = isFeaturedCatalogView() ? t("viewAll") : t("viewFeatured");
+    }
     updateProductStatus(products.length);
 
     if (!products.length) {
@@ -949,6 +1005,7 @@
         const target = document.getElementById(id);
         if (!target) return;
         event.preventDefault();
+        if (link.hasAttribute("data-show-all-products")) showAllProducts();
         closeDrawers();
         scrollToId(id);
       });
@@ -980,16 +1037,24 @@
   function bindProducts() {
     $$(".category-card").forEach((card) => {
       card.addEventListener("click", () => {
+        state.catalogMode = "all";
         filterProducts(card.dataset.category);
         scrollToId("products");
       });
     });
 
     $("[data-view-all]").addEventListener("click", () => {
-      state.searchQuery = "";
-      const searchInput = $("#searchInput");
-      if (searchInput) searchInput.value = "";
-      filterProducts("all");
+      if (isFeaturedCatalogView()) {
+        showAllProducts();
+      } else {
+        state.catalogMode = "featured";
+        state.selectedCategory = "all";
+        state.searchQuery = "";
+        const searchInput = $("#searchInput");
+        if (searchInput) searchInput.value = "";
+        setActiveCategory("all");
+        renderProducts();
+      }
       scrollToId("products");
     });
 
@@ -1056,6 +1121,7 @@
   function bindSearch() {
     $("#searchInput").addEventListener("input", (event) => {
       state.searchQuery = event.target.value.trim();
+      if (state.searchQuery) state.catalogMode = "all";
       if (state.searchQuery) setActiveCategory("all");
       renderProducts();
     });
@@ -1064,6 +1130,7 @@
       event.preventDefault();
       const query = $("#searchInput").value.trim();
       state.searchQuery = query;
+      if (state.searchQuery) state.catalogMode = "all";
       if (state.searchQuery) setActiveCategory("all");
       renderProducts();
       if (query) showToast(t("searchReady", { query }));

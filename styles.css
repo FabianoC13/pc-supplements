@@ -561,6 +561,11 @@ body.is-loaded .hero__media {
   text-align: center;
 }
 
+.section-heading--center p {
+  max-width: 620px;
+  margin: 12px auto 0;
+}
+
 .section-heading h2,
 .process-copy h2,
 .image-feature__content h2,
@@ -601,10 +606,12 @@ body.is-loaded .hero__media {
 }
 
 .category-card {
+  position: relative;
   min-height: 150px;
   display: grid;
   gap: 14px;
   place-items: center;
+  overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid var(--line);
   background: var(--paper);
@@ -615,6 +622,32 @@ body.is-loaded .hero__media {
     transform 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease;
+}
+
+.category-card--collection {
+  min-height: 178px;
+  align-content: end;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(250, 249, 245, 0.3), rgba(250, 249, 245, 0.94)),
+    radial-gradient(circle at 24% 14%, rgba(19, 52, 98, 0.18), transparent 38%),
+    var(--paper);
+}
+
+.category-card--collection::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    linear-gradient(135deg, transparent 0 48%, rgba(19, 52, 98, 0.08) 48% 52%, transparent 52%),
+    radial-gradient(circle at 72% 28%, rgba(193, 133, 68, 0.16), transparent 28%);
+  opacity: 0.82;
+  transition: transform 260ms ease;
+}
+
+.category-card--collection:hover::before {
+  transform: scale(1.05);
 }
 
 .category-card:hover,
@@ -869,6 +902,13 @@ body.is-loaded .hero__media {
 
 .blank-title {
   margin: 0 0 20px;
+}
+
+.split-title {
+  max-width: 520px;
+  margin: 0 0 18px;
+  font-size: clamp(1.8rem, 3.2vw, 2.7rem);
+  line-height: 1.08;
 }
 
 .blank-title span {

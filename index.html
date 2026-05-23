@@ -10,11 +10,11 @@
     />
     <link
       rel="icon"
-      href="./logo.svg?v=hybrid-payments"
+      href="./logo.svg?v=home-reference"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=hybrid-payments" />
+    <link rel="stylesheet" href="./styles.css?v=home-reference" />
   </head>
   <body>
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=hybrid-payments" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=home-reference" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -75,7 +75,7 @@
 
       <nav class="site-nav" aria-label="Navegacion principal" data-i18n-aria="mainNavAria">
         <a class="nav-link active" href="#home" data-i18n="navHome">Inicio</a>
-        <a class="nav-link" href="#products" data-i18n="navProducts">Todos los suplementos</a>
+        <a class="nav-link" href="#products" data-show-all-products data-i18n="navProducts">Todos los productos</a>
         <a class="nav-link" href="#about" data-i18n="navAbout">Nosotros</a>
         <a class="nav-link" href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
         <a class="nav-link" href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
@@ -89,15 +89,15 @@
       <section class="hero" aria-label="Principal" data-i18n-aria="primaryAria">
         <div class="hero__media" aria-hidden="true"></div>
         <div class="container hero__content">
-          <p class="eyebrow" data-i18n="heroEyebrow">Lima, Peru · Laboratorio cientifico de suplementos</p>
+          <p class="eyebrow" data-i18n="heroEyebrow">Lima, Peru · Peptidos e insumos de investigacion</p>
           <h1 class="hero-title hero-title--text">P&amp;C Supplements</h1>
           <p data-i18n="heroCopy">
-            Un catalogo de enfoque cientifico para Peru, con presentacion de
-            laboratorio, fichas listas para certificados y pago en soles.
+            Materiales de investigacion con presentacion clinica, trazabilidad
+            por lote y checkout local en soles para Peru.
           </p>
           <div class="hero__actions">
             <button class="button button--accent" type="button" data-scroll-target="products">
-              <span data-i18n="heroBrowse">Ver suplementos</span>
+              <span data-i18n="heroBrowse">Explorar productos</span>
             </button>
             <button class="button button--ghost-dark" type="button" data-scroll-target="test-results">
               <span data-i18n="heroCertificates">Ver certificados de calidad</span>
@@ -108,40 +108,41 @@
 
       <section class="feature-strip" aria-label="Senales de confianza" data-i18n-aria="trustSignalsAria">
         <div class="container feature-strip__inner">
-          <span><i data-lucide="truck" aria-hidden="true"></i><span data-i18n="featureDelivery">Entrega en Peru</span></span>
-          <span><i data-lucide="microscope" aria-hidden="true"></i><span data-i18n="featureLab">Revision de laboratorio</span></span>
-          <span><i data-lucide="shield-check" aria-hidden="true"></i><span data-i18n="featureRecords">Registros de calidad</span></span>
-          <span><i data-lucide="flask-conical" aria-hidden="true"></i><span data-i18n="featureSupport">Soporte cientifico</span></span>
+          <span><i data-lucide="truck" aria-hidden="true"></i><span data-i18n="featureDelivery">Envio a todo el Peru</span></span>
+          <span><i data-lucide="microscope" aria-hidden="true"></i><span data-i18n="featureLab">Formulas con respaldo cientifico</span></span>
+          <span><i data-lucide="shield-check" aria-hidden="true"></i><span data-i18n="featureRecords">Transparencia por lote</span></span>
+          <span><i data-lucide="messages-square" aria-hidden="true"></i><span data-i18n="featureSupport">Soporte 24/7</span></span>
         </div>
       </section>
 
       <section class="category-section" aria-labelledby="categoryTitle">
         <div class="container">
           <div class="section-heading section-heading--center">
-            <h2 id="categoryTitle" data-i18n="categoryTitle">Comprar por categoria</h2>
+            <h2 id="categoryTitle" data-i18n="categoryTitle">Colecciones principales</h2>
+            <p data-i18n="categoryCopy">El inicio muestra solo colecciones y productos destacados; el catalogo completo queda separado.</p>
           </div>
           <div class="category-grid" role="list">
-            <button class="category-card active" type="button" data-category="all" role="listitem">
-              <span class="category-card__icon"><i data-lucide="microscope" aria-hidden="true"></i></span>
-              <span data-i18n="catMicroscopy">Todos</span>
+            <button class="category-card category-card--collection" type="button" data-category="peptides" role="listitem">
+              <span class="category-card__icon"><i data-lucide="atom" aria-hidden="true"></i></span>
+              <span data-i18n="catMicroscopy">Peptidos</span>
             </button>
-            <button class="category-card" type="button" data-category="bioregulators" role="listitem">
-              <span class="category-card__icon"><i data-lucide="activity" aria-hidden="true"></i></span>
-              <span data-i18n="catAnalytes">Bioreguladores</span>
+            <button class="category-card category-card--collection" type="button" data-category="gh-analogs-and-secretagogues" role="listitem">
+              <span class="category-card__icon"><i data-lucide="test-tube" aria-hidden="true"></i></span>
+              <span data-i18n="catAnalytes">GH analogos</span>
             </button>
-            <button class="category-card" type="button" data-category="glp-1" role="listitem">
+            <button class="category-card category-card--collection" type="button" data-category="glp-1" role="listitem">
               <span class="category-card__icon"><i data-lucide="flask-conical" aria-hidden="true"></i></span>
               <span data-i18n="catFormulas">GLP-1</span>
             </button>
-            <button class="category-card" type="button" data-category="sarms" role="listitem">
-              <span class="category-card__icon"><i data-lucide="atom" aria-hidden="true"></i></span>
-              <span data-i18n="catCompounds">SARMs</span>
+            <button class="category-card category-card--collection" type="button" data-category="myostatin-inhibitors" role="listitem">
+              <span class="category-card__icon"><i data-lucide="activity" aria-hidden="true"></i></span>
+              <span data-i18n="catCompounds">Inhibidores de miostatina</span>
             </button>
-            <button class="category-card" type="button" data-category="nootropics" role="listitem">
+            <button class="category-card category-card--collection" type="button" data-category="nootropics" role="listitem">
               <span class="category-card__icon"><i data-lucide="brain" aria-hidden="true"></i></span>
               <span data-i18n="catMethods">Nootropicos</span>
             </button>
-            <button class="category-card" type="button" data-category="research-supplies" role="listitem">
+            <button class="category-card category-card--collection" type="button" data-category="research-supplies" role="listitem">
               <span class="category-card__icon"><i data-lucide="package-open" aria-hidden="true"></i></span>
               <span data-i18n="catSupplies">Insumos de laboratorio</span>
             </button>
@@ -152,8 +153,8 @@
       <section class="product-section" id="products" aria-labelledby="productsTitle">
         <div class="container">
           <div class="section-heading">
-            <h2 id="productsTitle" data-i18n="productsTitle">Catalogo de productos</h2>
-            <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo</span> <span aria-hidden="true">→</span></button>
+            <h2 id="productsTitle" data-i18n="featuredProductsTitle">Productos destacados</h2>
+            <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo el catalogo</span> <span aria-hidden="true">→</span></button>
           </div>
 
           <p class="search-status" id="searchStatus" aria-live="polite"></p>
@@ -165,18 +166,19 @@
       <section class="process-section" id="about" aria-labelledby="processTitle">
         <div class="container process-grid">
           <div class="process-copy">
-            <h2 id="processTitle" data-i18n="processTitle">Construido para revision cientifica</h2>
+            <h2 id="processTitle" data-i18n="processTitle">Fuente confiable para materiales de investigacion</h2>
             <p data-i18n="processCopy">
-              Un layout cientifico para suplementos, con espacio para notas de
-              origen, registros analiticos, metodos y documentacion de calidad.
+              P&amp;C Supplements esta estructurada para laboratorios, investigadores
+              y compradores profesionales que necesitan presentacion clara,
+              documentacion y manejo responsable.
             </p>
             <ul class="check-list">
-              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint1">Precios y entrega pensados para Peru</span></li>
-              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint2">Catalogo listo para fichas y fotos de laboratorio</span></li>
-              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint3">Espacio para microscopia y certificados por lote</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint1">Productos organizados para uso de investigacion y laboratorio</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint2">Espacio para certificados, reportes y datos por lote</span></li>
+              <li><i data-lucide="check" aria-hidden="true"></i><span data-i18n="processPoint3">Operacion local pensada para Peru, con pago en soles</span></li>
             </ul>
             <button class="button button--outline" type="button" data-scroll-target="quality">
-              <span data-i18n="learnMore">Conocer mas</span>
+              <span data-i18n="learnMore">Ver estandares</span>
             </button>
           </div>
           <figure class="image-panel">
@@ -192,13 +194,11 @@
       <section class="split-band" id="quality" aria-labelledby="qualityTitle">
         <div class="container split-band__inner">
           <div>
-            <h2 id="qualityTitle" class="blank-title" aria-label="Titulo de seccion en blanco" data-i18n-aria="blankTitleAria">
-              <span></span>
-              <span></span>
-            </h2>
+            <h2 id="qualityTitle" class="split-title" data-i18n="qualityTitle">Peptidos de investigacion de alta calidad</h2>
             <p data-i18n="qualityCopy">
-              Aqui puede ir un bloque breve de credibilidad de marca, con
-              espacio para el texto final de lanzamiento.
+              El posicionamiento de marca queda centrado en pureza, consistencia
+              y documentacion. Los textos finales de claims, fabricantes y lotes
+              se pueden completar cuando existan certificados reales.
             </p>
             <button class="text-link" type="button" data-scroll-target="about"><span data-i18n="moreAbout">Mas sobre nosotros</span> <span aria-hidden="true">→</span></button>
           </div>
@@ -213,10 +213,10 @@
       <section class="image-feature" aria-labelledby="purityTitle">
         <div class="image-feature__image" aria-hidden="true"></div>
         <div class="image-feature__content">
-          <h2 id="purityTitle" data-i18n="analysisTitle">Analisis de laboratorio</h2>
+          <h2 id="purityTitle" data-i18n="analysisTitle">Pureza 99%+ documentada</h2>
           <p data-i18n="analysisCopy">
-            Usa este panel para un metodo analitico destacado, una historia de
-            certificados o una nota de laboratorio peruana.
+            Un bloque destacado para explicar HPLC, MS, certificados de analisis
+            y controles por lote cuando la documentacion final este lista.
           </p>
           <button class="button button--dark" type="button" data-scroll-target="products"><span data-i18n="shopNow">Comprar ahora</span></button>
         </div>
@@ -225,29 +225,29 @@
       <section class="trust-section" aria-labelledby="trustTitle">
         <div class="container">
           <div class="section-heading section-heading--center">
-            <h2 id="trustTitle" data-i18n="trustTitle">Por que los clientes confian en nosotros</h2>
-            <p data-i18n="trustCopy">Tarjetas de confianza para compra cientifica de suplementos en Peru.</p>
+            <h2 id="trustTitle" data-i18n="trustTitle">Transparencia y profesionalismo</h2>
+            <p data-i18n="trustCopy">El home resume la promesa de servicio antes de enviar al catalogo completo.</p>
           </div>
           <div class="trust-grid">
             <article>
-              <i data-lucide="badge-check" aria-hidden="true"></i>
-              <h3 data-i18n="trustPricingTitle">Precios locales</h3>
-              <p data-i18n="trustPricingCopy">Cada espacio de producto esta en S/ 100.00 para una grilla limpia.</p>
+              <i data-lucide="truck" aria-hidden="true"></i>
+              <h3 data-i18n="trustPricingTitle">Envio nacional</h3>
+              <p data-i18n="trustPricingCopy">La tienda esta preparada para cobertura Peru y precios en PEN.</p>
             </article>
             <article>
               <i data-lucide="microscope" aria-hidden="true"></i>
-              <h3 data-i18n="trustQualityTitle">Calidad primero</h3>
-              <p data-i18n="trustQualityCopy">Estructurado para notas analiticas, certificados y soporte.</p>
+              <h3 data-i18n="trustQualityTitle">Base cientifica</h3>
+              <p data-i18n="trustQualityCopy">Mensajes centrados en investigacion, laboratorio y trazabilidad.</p>
             </article>
             <article>
               <i data-lucide="file-check-2" aria-hidden="true"></i>
-              <h3 data-i18n="trustCertificateTitle">Listo para certificados</h3>
-              <p data-i18n="trustCertificateCopy">Incluye espacio dedicado para certificados de calidad.</p>
+              <h3 data-i18n="trustCertificateTitle">Documentacion clara</h3>
+              <p data-i18n="trustCertificateCopy">Espacios listos para certificados, fechas, lotes y metodos.</p>
             </article>
             <article>
               <i data-lucide="message-circle" aria-hidden="true"></i>
-              <h3 data-i18n="trustSupportTitle">Soporte</h3>
-              <p data-i18n="trustSupportCopy">Cuenta y contacto permanecen disponibles en toda la tienda.</p>
+              <h3 data-i18n="trustSupportTitle">Atencion continua</h3>
+              <p data-i18n="trustSupportCopy">Acciones de cuenta, contacto y carrito disponibles en toda la tienda.</p>
             </article>
           </div>
         </div>
@@ -372,7 +372,7 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=hybrid-payments" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=home-reference" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
@@ -417,7 +417,7 @@
         </div>
         <nav>
           <a href="#home" data-i18n="navHome">Inicio</a>
-          <a href="#products" data-i18n="navProducts">Todos los suplementos</a>
+          <a href="#products" data-show-all-products data-i18n="navProducts">Todos los productos</a>
           <a href="#about" data-i18n="navAbout">Nosotros</a>
           <a href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
           <a href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
@@ -537,8 +537,8 @@
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://js.culqi.com/checkout-js"></script>
-    <script src="./config.js?v=hybrid-payments"></script>
-    <script src="./products.js?v=hybrid-payments"></script>
-    <script src="./app.js?v=hybrid-payments"></script>
+    <script src="./config.js?v=home-reference"></script>
+    <script src="./products.js?v=home-reference"></script>
+    <script src="./app.js?v=home-reference"></script>
   </body>
 </html>
