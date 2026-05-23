@@ -628,6 +628,7 @@
 
   function showToast(message) {
     const toast = $("#toast");
+    if (!toast) return;
     toast.textContent = message;
     toast.classList.add("show");
     clearTimeout(state.toastTimer);
@@ -950,10 +951,12 @@
   }
 
   function closeDrawers() {
-    $("#mobileDrawer").classList.remove("open");
-    $("#mobileDrawer").setAttribute("aria-hidden", "true");
-    $("#cartDrawer").classList.remove("open");
-    $("#cartDrawer").setAttribute("aria-hidden", "true");
+    const mobileDrawer = $("#mobileDrawer");
+    const cartDrawer = $("#cartDrawer");
+    mobileDrawer?.classList.remove("open");
+    mobileDrawer?.setAttribute("aria-hidden", "true");
+    cartDrawer?.classList.remove("open");
+    cartDrawer?.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
   }
 
@@ -966,9 +969,12 @@
 
   function renderCart() {
     const count = state.cart.length;
-    $("#cartCount").textContent = String(count);
-    $("#cartTotal").textContent = `${t("totalLabel")}: ${formatPrice(count * PRODUCT_PRICE)}`;
+    const cartCount = $("#cartCount");
+    const cartTotal = $("#cartTotal");
     const lines = $("#cartLines");
+    if (cartCount) cartCount.textContent = String(count);
+    if (cartTotal) cartTotal.textContent = `${t("totalLabel")}: ${formatPrice(count * PRODUCT_PRICE)}`;
+    if (!lines) return;
 
     if (!count) {
       lines.innerHTML = `<p>${t("cartEmpty")}</p>`;
@@ -1082,7 +1088,7 @@
     const batch = escapeHtml(getBatchNumber(product));
     const label = `
       <span class="lab-label">
-        <img src="./logo.svg?v=catalog-layout" alt="" />
+        <img src="./logo.svg?v=catalog-page" alt="" />
         <strong>${labelName}</strong>
         <small>Batch No.${batch}</small>
       </span>
@@ -1262,20 +1268,23 @@
   }
 
   function renderReview() {
+    const reviewCard = $("#reviewCard");
+    const reviewIndex = $("#reviewIndex");
+    if (!reviewCard || !reviewIndex) return;
     const languageReviews = reviews[state.language] || reviews.es;
     const review = languageReviews[state.reviewIndex % languageReviews.length];
-    $("#reviewCard").innerHTML = `
+    reviewCard.innerHTML = `
       <p>"${review.quote}"</p>
       <div>
         <strong>${review.author}</strong>
         <span>${review.date}</span>
       </div>
     `;
-    $("#reviewIndex").textContent = `${state.reviewIndex + 1} / ${languageReviews.length}`;
+    reviewIndex.textContent = `${state.reviewIndex + 1} / ${languageReviews.length}`;
   }
 
   function openDialog(dialog) {
-    if (!dialog.open) dialog.showModal();
+    if (dialog && !dialog.open) dialog.showModal();
   }
 
   function bindNavigation() {
@@ -1286,7 +1295,6 @@
         const target = document.getElementById(id);
         if (!target) return;
         event.preventDefault();
-        if (link.hasAttribute("data-show-all-products")) showAllProducts();
         closeDrawers();
         scrollToId(id);
       });
@@ -1298,11 +1306,11 @@
   }
 
   function bindHeader() {
-    $("#menuButton").addEventListener("click", () => openDrawer($("#mobileDrawer")));
-    $("[data-close-menu]").addEventListener("click", closeDrawers);
-    $("#cartButton").addEventListener("click", () => openDrawer($("#cartDrawer")));
-    $("[data-close-cart]").addEventListener("click", closeDrawers);
-    $("#accountButton").addEventListener("click", () => openDialog($("#accountModal")));
+    $("#menuButton")?.addEventListener("click", () => openDrawer($("#mobileDrawer")));
+    $("[data-close-menu]")?.addEventListener("click", closeDrawers);
+    $("#cartButton")?.addEventListener("click", () => openDrawer($("#cartDrawer")));
+    $("[data-close-cart]")?.addEventListener("click", closeDrawers);
+    $("#accountButton")?.addEventListener("click", () => openDialog($("#accountModal")));
 
     $$(".mobile-drawer, .cart-drawer").forEach((drawer) => {
       drawer.addEventListener("click", (event) => {
@@ -1310,7 +1318,7 @@
       });
     });
 
-    $("#languageSelect").addEventListener("change", (event) => {
+    $("#languageSelect")?.addEventListener("change", (event) => {
       setLanguage(event.target.value, { persist: true });
     });
   }
@@ -1327,9 +1335,9 @@
       });
     });
 
-    $("[data-view-all]").addEventListener("click", () => {
+    $("[data-view-all]")?.addEventListener("click", () => {
       if (isFeaturedCatalogView()) {
-        showAllProducts();
+        return;
       } else {
         state.catalogMode = "featured";
         state.selectedCategory = "all";
@@ -1343,7 +1351,7 @@
       scrollToId("products");
     });
 
-    $("#catalogSidebar").addEventListener("change", (event) => {
+    $("#catalogSidebar")?.addEventListener("change", (event) => {
       const input = event.target.closest("input[data-filter-type]");
       if (!input) return;
       const selector = `input[data-filter-type="${input.dataset.filterType}"]:checked`;
@@ -1360,13 +1368,13 @@
       renderProducts();
     });
 
-    $("#catalogSort").addEventListener("change", (event) => {
+    $("#catalogSort")?.addEventListener("change", (event) => {
       state.sortMode = event.target.value;
       state.visibleProductCount = CATALOG_PAGE_SIZE;
       renderProducts();
     });
 
-    $("#loadMoreProducts").addEventListener("click", () => {
+    $("#loadMoreProducts")?.addEventListener("click", () => {
       state.visibleProductCount += CATALOG_PAGE_SIZE;
       renderProducts();
     });
@@ -1378,7 +1386,7 @@
       });
     });
 
-    $("#productGrid").addEventListener("click", (event) => {
+    $("#productGrid")?.addEventListener("click", (event) => {
       const button = event.target.closest(".add-cart");
       if (!button) return;
       const product = PRODUCTS_BY_ID.get(button.dataset.productId);
@@ -1388,7 +1396,7 @@
       showToast(`${PRODUCT_PRICE_LABEL} ${t("addCartToast")}`);
     });
 
-    $("#cartLines").addEventListener("click", (event) => {
+    $("#cartLines")?.addEventListener("click", (event) => {
       const removeButton = event.target.closest("[data-remove-cart]");
       if (!removeButton) return;
       state.cart.splice(Number(removeButton.dataset.removeCart), 1);
@@ -1396,7 +1404,7 @@
       showToast(t("itemRemoved"));
     });
 
-    $("#checkoutButton").addEventListener("click", async () => {
+    $("#checkoutButton")?.addEventListener("click", async () => {
       if (!state.cart.length) {
         showToast(t("cartEmptyToast"));
         return;
@@ -1432,7 +1440,7 @@
   }
 
   function bindSearch() {
-    $("#searchInput").addEventListener("input", (event) => {
+    $("#searchInput")?.addEventListener("input", (event) => {
       state.searchQuery = event.target.value.trim();
       if (state.searchQuery) {
         state.catalogMode = "all";
@@ -1442,7 +1450,7 @@
       renderProducts();
     });
 
-    $("#searchForm").addEventListener("submit", (event) => {
+    $("#searchForm")?.addEventListener("submit", (event) => {
       event.preventDefault();
       const query = $("#searchInput").value.trim();
       state.searchQuery = query;
@@ -1465,13 +1473,13 @@
       });
     });
 
-    $("#reviewPrev").addEventListener("click", () => {
+    $("#reviewPrev")?.addEventListener("click", () => {
       const languageReviews = reviews[state.language] || reviews.es;
       state.reviewIndex = (state.reviewIndex - 1 + languageReviews.length) % languageReviews.length;
       renderReview();
     });
 
-    $("#reviewNext").addEventListener("click", () => {
+    $("#reviewNext")?.addEventListener("click", () => {
       const languageReviews = reviews[state.language] || reviews.es;
       state.reviewIndex = (state.reviewIndex + 1) % languageReviews.length;
       renderReview();
@@ -1479,17 +1487,19 @@
   }
 
   function bindForms() {
-    $("#newsletterForm").addEventListener("submit", (event) => {
+    $("#newsletterForm")?.addEventListener("submit", (event) => {
       event.preventDefault();
-      $("#newsletterEmail").value = "";
+      const newsletterEmail = $("#newsletterEmail");
+      if (newsletterEmail) newsletterEmail.value = "";
       showToast(t("newsletterToast"));
     });
 
-    $("#calculatorForm").addEventListener("submit", (event) => {
+    $("#calculatorForm")?.addEventListener("submit", (event) => {
       event.preventDefault();
-      const amount = Number($("#amountInput").value);
-      const volume = Number($("#volumeInput").value);
+      const amount = Number($("#amountInput")?.value);
+      const volume = Number($("#volumeInput")?.value);
       const output = $("#calculatorOutput");
+      if (!output) return;
       if (!amount || !volume) {
         output.textContent = t("enterAmountVolume");
         output.dataset.hasResult = "true";
@@ -1499,11 +1509,11 @@
       output.dataset.hasResult = "true";
     });
 
-    $("#accountModal").addEventListener("close", () => {
+    $("#accountModal")?.addEventListener("close", () => {
       if ($("#accountModal").returnValue === "signin") showToast(t("accountToast"));
     });
 
-    $("#contactModal").addEventListener("close", () => {
+    $("#contactModal")?.addEventListener("close", () => {
       if ($("#contactModal").returnValue === "send") showToast(t("messageSent"));
     });
 
@@ -1511,7 +1521,7 @@
       button.addEventListener("click", () => openDialog($("#contactModal")));
     });
 
-    $("[data-open-results]").addEventListener("click", () => {
+    $("[data-open-results]")?.addEventListener("click", () => {
       showToast(t("qualityToast"));
     });
 
@@ -1524,25 +1534,25 @@
     const researchNotice = $("#researchNotice");
     const cookieBanner = $("#cookieBanner");
 
-    $("#acceptResearch").addEventListener("click", () => {
+    $("#acceptResearch")?.addEventListener("click", () => {
       researchNotice.close();
       window.localStorage.setItem("pcSupplementNoticeAccepted", "1");
     });
 
-    $("#leaveSite").addEventListener("click", () => {
+    $("#leaveSite")?.addEventListener("click", () => {
       showToast(t("noticeStillOpen"));
     });
 
-    $("#acceptCookies").addEventListener("click", () => {
+    $("#acceptCookies")?.addEventListener("click", () => {
       cookieBanner.classList.add("hidden");
       window.localStorage.setItem("cookiesAccepted", "1");
     });
 
-    if (window.localStorage.getItem("cookiesAccepted") === "1") {
+    if (cookieBanner && window.localStorage.getItem("cookiesAccepted") === "1") {
       cookieBanner.classList.add("hidden");
     }
 
-    if (window.localStorage.getItem("pcSupplementNoticeAccepted") !== "1") {
+    if (researchNotice && window.localStorage.getItem("pcSupplementNoticeAccepted") !== "1") {
       setTimeout(() => openDialog(researchNotice), 350);
     }
   }
@@ -1625,6 +1635,10 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    if (document.body.dataset.page === "products") {
+      state.catalogMode = "all";
+      state.visibleProductCount = CATALOG_PAGE_SIZE;
+    }
     state.paymentMethod = CONFIG.DEFAULT_PAYMENT_METHOD === "crypto" ? "crypto" : "card";
     initIcons();
     bindNavigation();

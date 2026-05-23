@@ -724,8 +724,22 @@ body.is-loaded .hero__media {
   background: transparent;
 }
 
+.catalog-breadcrumb a {
+  color: inherit;
+}
+
 .catalog-breadcrumb strong {
   color: var(--ink);
+}
+
+.product-page-section {
+  min-height: calc(100vh - 108px);
+}
+
+.catalog-heading h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  line-height: 1.05;
 }
 
 .catalog-heading__main {

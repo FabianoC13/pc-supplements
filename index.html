@@ -10,13 +10,13 @@
     />
     <link
       rel="icon"
-      href="./logo.svg?v=catalog-layout"
+      href="./logo.svg?v=catalog-page"
       type="image/svg+xml"
     />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="./styles.css?v=catalog-layout" />
+    <link rel="stylesheet" href="./styles.css?v=catalog-page" />
   </head>
-  <body>
+  <body data-page="home">
     <div class="top-strip" aria-label="Datos de servicio" data-i18n-aria="topStripAria">
       <div class="top-strip__inner">
         <span data-i18n="topPeru">Laboratorio cientifico en Peru.</span>
@@ -30,7 +30,7 @@
       <div class="header-main">
         <a class="brand" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
           <span class="brand__mark" aria-hidden="true">
-            <img class="brand__logo" src="./logo.svg?v=catalog-layout" alt="" />
+            <img class="brand__logo" src="./logo.svg?v=catalog-page" alt="" />
           </span>
           <span class="brand__text">P&amp;C Supplements</span>
         </a>
@@ -75,7 +75,7 @@
 
       <nav class="site-nav" aria-label="Navegacion principal" data-i18n-aria="mainNavAria">
         <a class="nav-link active" href="#home" data-i18n="navHome">Inicio</a>
-        <a class="nav-link" href="#products" data-show-all-products data-i18n="navProducts">Todos los productos</a>
+        <a class="nav-link" href="./products.html?v=catalog-page" target="_blank" rel="noopener" data-i18n="navProducts">Todos los productos</a>
         <a class="nav-link" href="#about" data-i18n="navAbout">Nosotros</a>
         <a class="nav-link" href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
         <a class="nav-link" href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
@@ -172,7 +172,7 @@
                     <option value="category" data-i18n="sortCategory">Categoria</option>
                   </select>
                 </label>
-                <button class="text-link" type="button" data-view-all><span data-i18n="viewAll">Ver todo el catalogo</span> <span aria-hidden="true">→</span></button>
+                <a class="text-link" href="./products.html?v=catalog-page" target="_blank" rel="noopener" data-view-all><span data-i18n="viewAll">Ver todo el catalogo</span> <span aria-hidden="true">→</span></a>
               </div>
             </div>
           </div>
@@ -405,7 +405,7 @@
         <div>
           <a class="brand brand--footer" href="#home" aria-label="Inicio" data-i18n-aria="homeAria">
             <span class="brand__mark" aria-hidden="true">
-              <img class="brand__logo" src="./logo.svg?v=catalog-layout" alt="" />
+              <img class="brand__logo" src="./logo.svg?v=catalog-page" alt="" />
             </span>
             <span class="brand__text">P&amp;C Supplements</span>
           </a>
@@ -450,7 +450,7 @@
         </div>
         <nav>
           <a href="#home" data-i18n="navHome">Inicio</a>
-          <a href="#products" data-show-all-products data-i18n="navProducts">Todos los productos</a>
+          <a href="./products.html?v=catalog-page" target="_blank" rel="noopener" data-i18n="navProducts">Todos los productos</a>
           <a href="#about" data-i18n="navAbout">Nosotros</a>
           <a href="#test-results" data-i18n="navCertificates">Certificados de calidad</a>
           <a href="#calculator" data-i18n="navCalculator">Calculadora de laboratorio</a>
@@ -570,8 +570,8 @@
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://js.culqi.com/checkout-js"></script>
-    <script src="./config.js?v=catalog-layout"></script>
-    <script src="./products.js?v=catalog-layout"></script>
-    <script src="./app.js?v=catalog-layout"></script>
+    <script src="./config.js?v=catalog-page"></script>
+    <script src="./products.js?v=catalog-page"></script>
+    <script src="./app.js?v=catalog-page"></script>
   </body>
 </html>
