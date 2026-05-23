@@ -1111,7 +1111,7 @@
     const batch = escapeHtml(getBatchNumber(product));
     const label = `
       <span class="lab-label">
-        <img src="./logo.svg?v=section-pages" alt="" />
+        <img src="./logo.svg" alt="" />
         <strong>${labelName}</strong>
         <small>Batch No.${batch}</small>
       </span>
@@ -1477,7 +1477,7 @@
       event.preventDefault();
       const query = $("#searchInput")?.value.trim() || "";
       if (!$("#productGrid")) {
-        if (query) window.location.href = `./products.html?v=section-pages&q=${encodeURIComponent(query)}`;
+        if (query) window.location.href = `./products.html?q=${encodeURIComponent(query)}`;
         return;
       }
       state.searchQuery = query;
@@ -1563,7 +1563,7 @@
           openDialog(contactModal);
           return;
         }
-        window.location.href = "./contact.html?v=section-pages";
+        window.location.href = "./contact.html";
       });
     });
 
